@@ -1,0 +1,48 @@
+remotes {
+    dev {
+        host = '133.186.215.243'
+        user = 'ubuntu'
+        identity = file(project.property('sejun_dev'))
+    }
+}
+
+def remoteSvr
+def devSuffix = ''
+
+task devHostSet() {
+    doFirst {
+        remoteSvr = remotes.dev
+        devSuffix = '_dev'
+    }
+    finalizedBy 'Upload_SSH'
+}
+
+task Upload_DEV {
+    group = 'deploy nhn server'
+    dependsOn 'build'
+    finalizedBy 'devHostSet'
+}
+
+task Upload_SSH() {
+    doFirst {
+        ssh.run {
+            session(remoteSvr) {
+                String homeDir = "/home/ubuntu/temp"
+                String targetDir = "/home/ubuntu/pokerunner"
+
+                execute "sudo rm -f ${homeDir}/*"
+                put from: file("${buildDir}/libs/${rootProject.name}.jar"), into: homeDir
+                put from: file("run-dev/startup.sh"), into: homeDir
+                put from: file("run-dev/shutdown.sh"), into: homeDir
+
+                execute "sudo chmod 700 ${homeDir}/${rootProject.name}.jar"
+                execute "sudo chmod 700 ${homeDir}/startup.sh"
+                execute "sudo chmod 700 ${homeDir}/shutdown.sh"
+
+                execute "sudo mv -f ${homeDir}/${rootProject.name}.jar ${homeDir}/${rootProject.name}.jar.work"
+                execute "sudo mv -f ${homeDir}/* ${targetDir}"
+            }
+        }
+    }
+}
+
