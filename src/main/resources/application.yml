@@ -2,11 +2,13 @@ logging:
   config: classpath:logback-dev.xml
 
 spring:
+  config:
+    import: "db.properties"
   application:
     name: pokerunner
 
   datasource:
-    url: jdbc:mysql://133.186.215.243:3306/pokerunner?&useSSL=false
-    username: root1
-    password: poke1234$
+    url: ${database.url}
+    username: ${database.username}
+    password: ${database.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
