@@ -6,7 +6,7 @@ spring:
     name: pokerunner
 
   datasource:
-    url: jdbc:mysql://133.186.215.243:3306/pokerunner
-    username: root
+    url: jdbc:mysql://133.186.215.243:3306/pokerunner?&useSSL=false
+    username: root1
     password: poke1234$
     driver-class-name: com.mysql.cj.jdbc.Driver

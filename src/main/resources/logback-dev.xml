@@ -16,4 +16,8 @@
     <logger name="com.flab.pokerunner" level="INFO" additivity="false">
         <appender-ref ref="debug_log"/>
     </logger>
+
+    <root level="error">
+        <appender-ref ref="debug_log"/>
+    </root>
 </configuration>
