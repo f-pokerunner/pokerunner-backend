@@ -1,0 +1,19 @@
+<configuration>
+    <property name="logFileRootPath" value="${HOME}/pokerunner/log/"/>
+    <property name="logPattern" value="[%d{HH:mm:ss.SSS}|%1p|%-20F:%-3L|%X{URI}|%X{ID}|%replace(%t){'http-nio-.*-exec-', 'http-'}] %m%n"/>
+    <property name="fileDatePattern" value="yyyy-MM-dd"/>
+
+    <appender name="debug_log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${logPattern}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logFileRootPath}debug.log.%d{${fileDatePattern}}.gz</fileNamePattern>
+            <maxHistory>45</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="com.flab.pokerunner" level="INFO" additivity="false">
+        <appender-ref ref="debug_log"/>
+    </logger>
+</configuration>
