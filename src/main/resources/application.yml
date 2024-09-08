@@ -6,9 +6,17 @@ spring:
     import: "db.properties"
   application:
     name: pokerunner
+  jpa:
+    hibernate:
+      ddl-auto: validate
 
   datasource:
     url: ${database.url}
     username: ${database.username}
     password: ${database.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+nhn:
+  map:
+    url: ${nhn.url}
