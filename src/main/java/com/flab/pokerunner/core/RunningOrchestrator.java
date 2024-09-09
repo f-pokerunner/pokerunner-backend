@@ -1,9 +1,9 @@
 package com.flab.pokerunner.core;
 
 import com.flab.pokerunner.domain.entity.UserRunningJpo;
-import com.flab.pokerunner.domain.event.running.RunningPaused;
 import com.flab.pokerunner.domain.event.running.RunningStarted;
 import com.flab.pokerunner.domain.event.running.RunningStopped;
+import com.flab.pokerunner.service.pokemon.PokemonStore;
 import com.flab.pokerunner.service.running.RunningStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +20,7 @@ public class RunningOrchestrator {
 
     private final GateWay gateWay;
     private final RunningStore runningStore;
+    private final PokemonStore pokemonStore;
     private final Map<Integer, Integer> userRunningMap = new HashMap<>();
 
     @EventListener
@@ -41,12 +42,8 @@ public class RunningOrchestrator {
                 foundRecordJpo.updateAfterEndRunning(event);
                 runningStore.save(foundRecordJpo);
             }
+            pokemonStore.save(event);
             userRunningMap.remove(userId);
         }
-    }
-
-    @EventListener
-    public void on(RunningPaused event) {
-
     }
 }
