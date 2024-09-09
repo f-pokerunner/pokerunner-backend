@@ -18,19 +18,17 @@ public class RunningService {
 
     public void start(StartRunningCommand command) {
         int userId = command.getUserId();
-        String startLat = command.getLat();
-        String startLng = command.getLon();
 
-        RunningSimulator simulator = new RunningSimulator(startLat, startLng, reverseGeocoding);
+        RunningSimulator simulator = new RunningSimulator(command, gateWay, reverseGeocoding);
         simulators.put(userId, simulator);
-        simulator.start(userId, gateWay);
+        simulator.start();
     }
 
     public void stop(StopRunningCommand command) {
         int userId = command.getUserId();
         RunningSimulator simulator = simulators.remove(userId);
         if (simulator != null) {
-            simulator.stop(userId, gateWay);
+            simulator.stop();
         }
     }
 }

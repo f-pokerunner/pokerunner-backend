@@ -13,4 +13,5 @@ import java.time.LocalDateTime;
 public class RunningStarted extends Events {
     int userId;
     LocalDateTime startTime;
+    String guAddress;
 }

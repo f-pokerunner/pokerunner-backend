@@ -1,6 +1,7 @@
 package com.flab.pokerunner.core;
 
 import com.flab.pokerunner.domain.entity.UserRunningJpo;
+import com.flab.pokerunner.domain.event.running.RunningPaused;
 import com.flab.pokerunner.domain.event.running.RunningStarted;
 import com.flab.pokerunner.domain.event.running.RunningStopped;
 import com.flab.pokerunner.service.running.RunningStore;
@@ -42,5 +43,10 @@ public class RunningOrchestrator {
             }
             userRunningMap.remove(userId);
         }
+    }
+
+    @EventListener
+    public void on(RunningPaused event) {
+
     }
 }
