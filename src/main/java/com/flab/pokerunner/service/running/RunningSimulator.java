@@ -1,10 +1,10 @@
 package com.flab.pokerunner.service.running;
 
 import com.flab.pokerunner.core.GateWay;
+import com.flab.pokerunner.domain.dto.LocationDto;
 import com.flab.pokerunner.domain.event.running.RunningStarted;
 import com.flab.pokerunner.domain.event.running.RunningStopped;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -15,22 +15,23 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 public class RunningSimulator {
-    private double currentLat;
-    private double currentLng;
     private final double direction;
     private final double speed;
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
+    private final ReverseGeocoding reverseGeocoding;
+    private double currentLat;
+    private double currentLng;
     private ScheduledExecutorService executor;
-
     private long startTime;
     private double totalDistance;
 
-    public RunningSimulator(String startLat, String startLng) {
+    public RunningSimulator(String startLat, String startLng, ReverseGeocoding reverseGeocoding) {
         this.currentLat = Double.parseDouble(startLat);
         this.currentLng = Double.parseDouble(startLng);
         this.direction = new Random().nextDouble() * 2 * Math.PI;
-        this.speed = 5.56;
+        this.speed = 300.0;
         this.totalDistance = 0.0;
+        this.reverseGeocoding = reverseGeocoding;
     }
 
     public void start(int userId, GateWay gateWay) {
@@ -76,8 +77,11 @@ public class RunningSimulator {
         currentLat += latChange;
         currentLng += lngChange;
 
+        LocationDto locationData = reverseGeocoding.getLocationData(currentLat, currentLng);
+        String address = locationData.getLocation().getLegalAddress().getAddress();
+
         totalDistance += speed * 3;
 
-        log.info("Current position: {}, {}", currentLat, currentLng);
+        log.info("Current position: {}, {}, {}", currentLat, currentLng, address);
     }
 }

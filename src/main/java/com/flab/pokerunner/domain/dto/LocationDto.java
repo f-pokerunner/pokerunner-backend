@@ -2,13 +2,16 @@ package com.flab.pokerunner.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class LocationDto {
     private Header header;
     private Location location;
 
     @Getter
+    @ToString
     public static class Header {
         private boolean isSuccessful;
         private int resultCode;
@@ -16,6 +19,7 @@ public class LocationDto {
     }
 
     @Getter
+    @ToString
     public static class Location {
         private boolean result;
         private boolean hasAdmAddress;
@@ -27,6 +31,7 @@ public class LocationDto {
     }
 
     @Getter
+    @ToString
     public static class Adm {
         private String posx;
         private String posy;
@@ -42,6 +47,7 @@ public class LocationDto {
     }
 
     @Getter
+    @ToString
     public static class AdmAddress {
         private String address;
         private String admcode;
@@ -59,6 +65,7 @@ public class LocationDto {
     }
 
     @Getter
+    @ToString
     public static class LegalAddress {
         private String address;
         private String admcode;
