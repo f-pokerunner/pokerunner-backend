@@ -21,7 +21,7 @@ public class UserPokemonJpo {
     public LocalDateTime createdDt;
 
     public void addExperienceAfterRunning(int distanceMeter) {
-        experience += distanceMeter;
+        experience += distanceMeter / 10;
     }
 
     public void subtractHealth(int damage) {

@@ -1,8 +1,10 @@
 package com.flab.pokerunner.core;
 
 import com.flab.pokerunner.domain.entity.UserRunningJpo;
+import com.flab.pokerunner.domain.event.running.PokemonSearched;
 import com.flab.pokerunner.domain.event.running.RunningStarted;
 import com.flab.pokerunner.domain.event.running.RunningStopped;
+import com.flab.pokerunner.service.PokemonSpotStore;
 import com.flab.pokerunner.service.pokemon.PokemonStore;
 import com.flab.pokerunner.service.running.RunningStore;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -21,6 +24,7 @@ public class RunningOrchestrator {
     private final GateWay gateWay;
     private final RunningStore runningStore;
     private final PokemonStore pokemonStore;
+    private final PokemonSpotStore pokemonSpotStore;
     private final Map<Integer, Integer> userRunningMap = new HashMap<>();
 
     @EventListener
@@ -45,5 +49,13 @@ public class RunningOrchestrator {
             pokemonStore.save(event);
             userRunningMap.remove(userId);
         }
+    }
+
+    @EventListener
+    public void on(PokemonSearched event) {
+        List<String> foundPokemons = pokemonSpotStore.searchPokemon(event);
+        foundPokemons.forEach(pokemon -> {
+            log.info("찾은 포켓몬 이름:{}", pokemon);
+        });
     }
 }
