@@ -23,4 +23,8 @@ public class UserPokemonJpo {
     public void addExperienceAfterRunning(int distanceMeter) {
         experience += distanceMeter;
     }
+
+    public void subtractHealth(int damage) {
+        health -= damage;
+    }
 }
