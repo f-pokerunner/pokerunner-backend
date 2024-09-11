@@ -22,7 +22,7 @@ public class PokemonLocJdbcRepository {
         String sql = """
                 SELECT RT.id              AS id,
                        P.pokemon_name     AS pokemonName,
-                       P.id               AS id,
+                       P.id               AS pokemonId,
                        P.evolution_status AS evolutionStatus,
                        P.image_url        AS imageUrl
                 FROM pokemon_location_real_time RT
@@ -35,7 +35,7 @@ public class PokemonLocJdbcRepository {
                 (rs, rowNum) -> new PokemonLocationDto(
                         rs.getInt("id"),
                         rs.getString("pokemonName"),
-                        rs.getInt("id"),
+                        rs.getInt("pokemonId"),
                         rs.getString("evolutionStatus"),
                         rs.getString("imageUrl")
                 ), lon, lat, radius
