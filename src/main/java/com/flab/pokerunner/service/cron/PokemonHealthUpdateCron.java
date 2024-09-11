@@ -26,7 +26,7 @@ public class PokemonHealthUpdateCron {
         userRunningTimeList.forEach(userRunningTime -> {
             boolean isOverThreeDays = DateUtil.isMoreThanThreeDays(userRunningTime.earliestStartTime);
             if (isOverThreeDays) {
-                UserPokemonJpo foundPokemon = userPokemonRepository.findByUserId(userRunningTime.getUserId());
+                UserPokemonJpo foundPokemon = userPokemonRepository.findByUserIdAndPokemonId(userRunningTime.getUserId(), userRunningTime.getDefaultPokemonId());
                 foundPokemon.subtractHealth(50);
             }
         });

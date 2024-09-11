@@ -43,8 +43,21 @@ public class UserPokemonJpo {
     @Column(name = "created_at",updatable = false)
     public LocalDateTime createdDt;
 
+    public static UserPokemonJpo from(PokemonSearched event, PokemonLocationDto pokemonLocationDto) {
+        return UserPokemonJpo.builder()
+                .userId(event.getUserId())
+                .pokemonId(pokemonLocationDto.getPokemonId())
+                .nickname(pokemonLocationDto.getPokemonName())
+                .health(100)
+                .evolutionStatus(pokemonLocationDto.getEvolutionStatus())
+                .level(1)
+                .experience(0)
+                .createdDt(LocalDateTime.now())
+                .build();
+    }
+
     public void addExperienceAfterRunning(int distanceMeter) {
-        experience += distanceMeter;
+        experience += distanceMeter / 10;
     }
 
     public void subtractHealth(int damage) {
