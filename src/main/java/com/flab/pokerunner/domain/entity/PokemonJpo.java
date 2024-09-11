@@ -24,7 +24,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Builder
 @Getter
 @Setter
-public class Pokemon {
+public class PokemonJpo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
