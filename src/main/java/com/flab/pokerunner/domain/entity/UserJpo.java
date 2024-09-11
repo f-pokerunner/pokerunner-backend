@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-public class User {
+public class UserJpo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

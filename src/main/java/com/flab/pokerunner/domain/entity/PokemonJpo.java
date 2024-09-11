@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-public class Pokemon {
+public class PokemonJpo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
