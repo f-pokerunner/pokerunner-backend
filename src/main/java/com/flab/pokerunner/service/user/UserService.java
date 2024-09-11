@@ -56,7 +56,7 @@ public class UserService {
                 .level(1)
                 .health(100)
                 .userUuid(userSignUpRequestDTO.getUuid())
-                .evolutionStatus("STAGE_ONE")
+                .evolutionStatus("1")
                 .experience(1)
                 .build();
 
