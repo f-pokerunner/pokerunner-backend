@@ -23,8 +23,8 @@ public class UserPokemonJpo {
     public int id;
 
     public int userId;
+    public String userUuid;
     public int pokemonId;
-    public String nickname;
     public int health;
 
     @Column(name = "evolution_status")
