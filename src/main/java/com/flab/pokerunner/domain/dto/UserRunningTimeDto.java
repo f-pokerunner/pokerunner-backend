@@ -9,5 +9,6 @@ import java.time.LocalDateTime;
 @Getter
 public class UserRunningTimeDto {
     public int userId;
+    public int defaultPokemonId;
     public LocalDateTime earliestStartTime;
 }

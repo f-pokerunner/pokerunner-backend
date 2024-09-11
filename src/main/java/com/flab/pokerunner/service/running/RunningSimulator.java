@@ -98,7 +98,7 @@ public class RunningSimulator {
         }
 
         log.info("현재 위치: {}, {}, {}", currentLat, currentLng, address);
-        gateWay.publish(PokemonSearched.of(currentLat, currentLng));
+        gateWay.publish(PokemonSearched.of(userId, currentLat, currentLng));
 
         currentLat += latChange;
         currentLng += lngChange;

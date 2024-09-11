@@ -34,15 +34,18 @@ public class UserRunningJdbcRepository {
 
     public List<UserRunningTimeDto> findUserRunningTimeList() {
         String sql = """
-                SELECT user_id,
-                       MAX(start_time) AS earliestStartTime
-                FROM user_running
+                SELECT ur.user_id,
+                       MAX(start_time) AS earliestStartTime,
+                       u.default_pokemon_id
+                FROM user_running ur
+                         LEFT JOIN users u ON ur.user_id = u.id
                 WHERE distance_meter > 10
                 GROUP BY user_id
                 """;
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> new UserRunningTimeDto(
                 rs.getInt("user_id"),
+                rs.getInt("default_pokemon_id"),
                 rs.getTimestamp("earliestStartTime").toLocalDateTime()
         ));
     }

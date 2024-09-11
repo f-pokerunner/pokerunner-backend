@@ -1,5 +1,6 @@
 package com.flab.pokerunner.core;
 
+import com.flab.pokerunner.domain.dto.PokemonLocationDto;
 import com.flab.pokerunner.domain.entity.UserRunningJpo;
 import com.flab.pokerunner.domain.event.running.PokemonSearched;
 import com.flab.pokerunner.domain.event.running.RunningStarted;
@@ -53,9 +54,10 @@ public class RunningOrchestrator {
 
     @EventListener
     public void on(PokemonSearched event) {
-        List<String> foundPokemons = pokemonSpotStore.searchPokemon(event);
+        List<PokemonLocationDto> foundPokemons = pokemonSpotStore.searchPokemon(event);
         foundPokemons.forEach(pokemon -> {
-            log.info("찾은 포켓몬 이름:{}", pokemon);
+            log.info("{} 이 찾은 포켓몬 이름:{}", event.getUserId(), pokemon.getPokemonName());
+            pokemonStore.save(event, pokemon);
         });
     }
 }

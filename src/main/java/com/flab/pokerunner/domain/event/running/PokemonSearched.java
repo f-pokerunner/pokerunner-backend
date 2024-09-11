@@ -7,10 +7,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class PokemonSearched extends Events {
+    int userId;
     String lat;
     String lon;
 
-    public static PokemonSearched of(double lat, double lon) {
-        return new PokemonSearched(String.valueOf(lat), String.valueOf(lon));
+    public static PokemonSearched of(int userId, double lat, double lon) {
+        return new PokemonSearched(userId, String.valueOf(lat), String.valueOf(lon));
     }
 }

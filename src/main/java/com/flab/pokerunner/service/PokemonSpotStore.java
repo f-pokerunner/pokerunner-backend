@@ -1,6 +1,7 @@
 package com.flab.pokerunner.service;
 
 import com.flab.pokerunner.domain.command.spot.EvolutionSpotCommand;
+import com.flab.pokerunner.domain.dto.PokemonLocationDto;
 import com.flab.pokerunner.domain.dto.nhn.CoordinatesDto;
 import com.flab.pokerunner.domain.event.running.PokemonSearched;
 import com.flab.pokerunner.repository.PokemonLocJdbcRepository;
@@ -29,8 +30,11 @@ public class PokemonSpotStore {
         return "Success";
     }
 
-    public List<String> searchPokemon(PokemonSearched event) {
-        List<String> foundPokemon = pokemonLocJdbcRepository.findPokemonLocationsNearby(event.getLon(), event.getLat(), "55000");
-        return foundPokemon;
+    public List<PokemonLocationDto> searchPokemon(PokemonSearched event) {
+        List<PokemonLocationDto> pokemonLocationsNearby = pokemonLocJdbcRepository.findPokemonLocationsNearby(event.getLon(), event.getLat(), "5000");
+        pokemonLocationsNearby.forEach(it -> {
+            pokemonLocJdbcRepository.updateOwnerId(it.getId(), event.getUserId());
+        });
+        return pokemonLocationsNearby;
     }
 }
