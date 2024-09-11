@@ -23,7 +23,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Builder
 @Getter
 @Setter
-public class User {
+public class UserJpo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,9 +35,6 @@ public class User {
     private String nickname;
 
     private String address;
-
-    @OneToMany(mappedBy = "user")
-    private List<UserPokemon> userPokemons;
 
 
     @CreatedDate
