@@ -24,6 +24,7 @@ public class UserPokemonJpo {
 
     public int userId;
     public String userUuid;
+    public String nickname;
     public int pokemonId;
     public int health;
 
