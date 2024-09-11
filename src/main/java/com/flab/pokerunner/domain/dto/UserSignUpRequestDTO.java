@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserLoginRequestDTO {
+public class UserSignUpRequestDTO {
     private String uuid;
     private String nickname;
     private String address;
+    private String pokemonName;
 }
