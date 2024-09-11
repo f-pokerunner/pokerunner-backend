@@ -1,16 +1,14 @@
 package com.flab.pokerunner.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import com.flab.pokerunner.domain.dto.PokemonLocationDto;
+import com.flab.pokerunner.domain.event.running.PokemonSearched;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_pokemon")
@@ -27,21 +25,15 @@ public class UserPokemonJpo {
     public String nickname;
     public int pokemonId;
     public int health;
-
-    @Column(name = "evolution_status")
-    private String evolutionStatus;
-
     public int level;
-
     public int experience;
-
-
     @Column(name = "default_pokemon")
     public boolean defaultPokemon;
-
     @CreatedDate
-    @Column(name = "created_at",updatable = false)
+    @Column(name = "created_dt", updatable = false)
     public LocalDateTime createdDt;
+    @Column(name = "evolution_status")
+    private String evolutionStatus;
 
     public static UserPokemonJpo from(PokemonSearched event, PokemonLocationDto pokemonLocationDto) {
         return UserPokemonJpo.builder()

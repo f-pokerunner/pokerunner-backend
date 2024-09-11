@@ -1,7 +1,7 @@
 package com.flab.pokerunner.service.pokemon;
 
 import com.flab.pokerunner.domain.dto.PokemonLocationDto;
-import com.flab.pokerunner.domain.entity.User;
+import com.flab.pokerunner.domain.entity.UserJpo;
 import com.flab.pokerunner.domain.entity.UserPokemonJpo;
 import com.flab.pokerunner.domain.event.running.PokemonSearched;
 import com.flab.pokerunner.domain.event.running.RunningStopped;
@@ -20,7 +20,7 @@ public class PokemonStore {
 
     @Transactional
     public void save(RunningStopped event) {
-        User user = userRepository.findById(event.getUserId());
+        UserJpo user = userRepository.findById(event.getUserId());
         Integer defaultPokemonId = user.getDefaultPokemonId();
         if (defaultPokemonId == null) return;
 
