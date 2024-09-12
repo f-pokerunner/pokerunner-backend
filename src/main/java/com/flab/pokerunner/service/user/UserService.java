@@ -107,7 +107,7 @@ public class UserService {
             userPokemonRepository.save(currentDefaultPokemon);
         }
 
-        UserPokemonJpo newDefaultPokemon = userPokemonRepository.findByUserUuidAndNickname(userSetDefaultPokemonDto.getUuid(), userSetDefaultPokemonDto.getPokemonName());
+        UserPokemonJpo newDefaultPokemon = userPokemonRepository.findFirstByUserUuidAndNickname(userSetDefaultPokemonDto.getUuid(), userSetDefaultPokemonDto.getPokemonName());
         if (newDefaultPokemon == null) {
             throw new PokemonNotFoundException("Requested Pokémon not found");
         }
