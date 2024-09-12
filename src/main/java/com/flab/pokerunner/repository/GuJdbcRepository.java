@@ -1,6 +1,7 @@
 package com.flab.pokerunner.repository;
 
 import com.flab.pokerunner.domain.dto.gu.GuBossDto;
+import com.flab.pokerunner.domain.dto.gu.GuBossRankDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -44,29 +45,46 @@ public class GuJdbcRepository {
                 .build());
     }
 
-    public List<GuBossDto> getGuBossByGuLimit3(String guAddress) {
+    public List<GuBossRankDto> getGuBossByGuLimit3(String guAddress) {
         String sql = """
-                SELECT u.id                                    AS userId,
-                       u.nickname                              AS userNickname,
-                       ur.gu_address                           AS runningAddress,
-                       SUM(CAST(ur.distance_meter AS DECIMAL)) AS totalDistanceMeter,
-                       p.pokemon_name                          AS pokemonName,
-                       p.image_url                             AS imageUrl
-                FROM user_running ur
-                         JOIN users u ON u.id = ur.user_id
-                         JOIN pokemon p ON u.default_pokemon_id = p.id
-                WHERE ur.gu_address = ?
-                GROUP BY u.id, u.nickname, ur.gu_address, p.pokemon_name, p.image_url
-                ORDER BY totalDistanceMeter DESC
+                WITH ranked_users AS (SELECT u.id                                                                      AS userId,
+                                             u.nickname                                                                AS userNickname,
+                                             ur.gu_address                                                             AS runningAddress,
+                                             SUM(CAST(ur.distance_meter AS DECIMAL))                                   AS totalDistanceMeter,
+                                             up.nickname                                                               AS pokemonName,
+                                             up.experience                                                             AS exp,
+                                             up.level                                                                  AS level,
+                                             p.image_url                                                               AS imageUrl,
+                                             ROW_NUMBER() OVER (ORDER BY SUM(CAST(ur.distance_meter AS DECIMAL)) DESC) AS ranking
+                                      FROM user_running ur
+                                               JOIN users u ON u.id = ur.user_id
+                                               JOIN user_pokemon up ON u.default_pokemon_id = up.pokemon_id
+                                               JOIN pokemon p ON u.default_pokemon_id = p.id
+                                      WHERE ur.gu_address = ?
+                                      GROUP BY u.id, u.nickname, ur.gu_address, up.nickname, up.experience, up.level, p.image_url)
+                SELECT ranking,
+                       userId,
+                       userNickname,
+                       runningAddress,
+                       totalDistanceMeter,
+                       pokemonName,
+                       exp,
+                       level,
+                       imageUrl
+                FROM ranked_users
+                ORDER BY ranking
                 LIMIT 3
                 """;
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> GuBossDto.builder()
+        return jdbcTemplate.query(sql, (rs, rowNum) -> GuBossRankDto.builder()
+                .ranking(rs.getInt("ranking"))
                 .userId(rs.getInt("userId"))
                 .userNickname(rs.getString("userNickname"))
                 .runningAddress(rs.getString("runningAddress"))
-                .totalDistance(rs.getString("totalDistanceMeter"))
+                .totalDistanceMeter(rs.getString("totalDistanceMeter"))
                 .pokemonName(rs.getString("pokemonName"))
+                .exp(rs.getInt("exp"))
+                .level(rs.getInt("level"))
                 .imageUrl(rs.getString("imageUrl"))
                 .build(), guAddress);
     }

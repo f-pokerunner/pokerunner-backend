@@ -1,6 +1,7 @@
 package com.flab.pokerunner.controller;
 
 import com.flab.pokerunner.domain.dto.gu.GuBossDto;
+import com.flab.pokerunner.domain.dto.gu.GuBossRankDto;
 import com.flab.pokerunner.domain.dto.gu.GuRequestDto;
 import com.flab.pokerunner.domain.entity.SeoulGuJpo;
 import com.flab.pokerunner.repository.GuJdbcRepository;
@@ -39,9 +40,9 @@ public class GuController {
     }
 
     @PostMapping("/boss")
-    public ResponseEntity<List<GuBossDto>> guBossTopThree(@RequestBody GuRequestDto guRequestDto) {
+    public ResponseEntity<List<GuBossRankDto>> guBossTopThree(@RequestBody GuRequestDto guRequestDto) {
         log.info("dto:{}", guRequestDto.guAddress);
-        List<GuBossDto> guBossByGuLimit3 = guJdbcRepository.getGuBossByGuLimit3(guRequestDto.guAddress);
+        List<GuBossRankDto> guBossByGuLimit3 = guJdbcRepository.getGuBossByGuLimit3(guRequestDto.guAddress);
         return ResponseEntity.ok(guBossByGuLimit3);
     }
 }
