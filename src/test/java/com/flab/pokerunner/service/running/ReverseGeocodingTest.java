@@ -1,5 +1,6 @@
 package com.flab.pokerunner.service.running;
 
+import com.flab.pokerunner.service.NHNMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -7,6 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ReverseGeocodingTest {
 
     @Autowired
-    ReverseGeocoding reverseGeocoding;
+    NHNMapService NHNMapService;
 
 }

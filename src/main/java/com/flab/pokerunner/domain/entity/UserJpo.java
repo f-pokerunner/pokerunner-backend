@@ -29,4 +29,6 @@ public class UserJpo {
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    private Integer defaultPokemonId;
 }

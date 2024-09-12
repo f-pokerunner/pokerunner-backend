@@ -1,4 +1,4 @@
-package com.flab.pokerunner.domain.dto;
+package com.flab.pokerunner.domain.dto.nhn;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

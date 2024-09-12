@@ -2,9 +2,11 @@ package com.flab.pokerunner.service.running;
 
 import com.flab.pokerunner.core.GateWay;
 import com.flab.pokerunner.domain.command.running.StartRunningCommand;
-import com.flab.pokerunner.domain.dto.LocationDto;
+import com.flab.pokerunner.domain.dto.nhn.LocationDto;
+import com.flab.pokerunner.domain.event.running.PokemonSearched;
 import com.flab.pokerunner.domain.event.running.RunningStarted;
 import com.flab.pokerunner.domain.event.running.RunningStopped;
+import com.flab.pokerunner.service.NHNMapService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -20,7 +22,7 @@ public class RunningSimulator {
     private final double direction;
     private final double speed;
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
-    private final ReverseGeocoding reverseGeocoding;
+    private final NHNMapService NHNMapService;
     private final GateWay gateWay;
     private final int userId;
     HashMap<Integer, String> userLocation = new HashMap<>();
@@ -30,20 +32,20 @@ public class RunningSimulator {
     private long startTime;
     private double totalDistance;
 
-    public RunningSimulator(StartRunningCommand command, GateWay gateWay, ReverseGeocoding reverseGeocoding) {
+    public RunningSimulator(StartRunningCommand command, GateWay gateWay, NHNMapService NHNMapService) {
         this.currentLat = Double.parseDouble(command.lat);
         this.currentLng = Double.parseDouble(command.lon);
         this.direction = new Random().nextDouble() * 2 * Math.PI;
         this.speed = 300.0;
         this.totalDistance = 0.0;
-        this.reverseGeocoding = reverseGeocoding;
+        this.NHNMapService = NHNMapService;
         this.gateWay = gateWay;
         this.userId = command.getUserId();
     }
 
     public void start() {
         if (isRunning.compareAndSet(false, true)) {
-            LocationDto locationData = reverseGeocoding.getLocationData(currentLat, currentLng);
+            LocationDto locationData = NHNMapService.getLocationData(currentLat, currentLng);
             String guAddress = locationData.getLocation().getAdmAddress().getAddressCategory2();
 
             userLocation.put(userId, guAddress);
@@ -86,7 +88,7 @@ public class RunningSimulator {
         double latChange = speed * Math.cos(direction) / 111000.0;
         double lngChange = speed * Math.sin(direction) / (111000.0 * Math.cos(Math.toRadians(currentLat)));
 
-        LocationDto locationData = reverseGeocoding.getLocationData(currentLat, currentLng);
+        LocationDto locationData = NHNMapService.getLocationData(currentLat, currentLng);
         String address = locationData.getLocation().getLegalAddress().getAddress();
         String guAddress = locationData.getLocation().getAdmAddress().getAddressCategory2();
         String foundAddress = userLocation.get(userId);
@@ -96,6 +98,7 @@ public class RunningSimulator {
         }
 
         log.info("현재 위치: {}, {}, {}", currentLat, currentLng, address);
+        gateWay.publish(PokemonSearched.of(userId, currentLat, currentLng));
 
         currentLat += latChange;
         currentLng += lngChange;

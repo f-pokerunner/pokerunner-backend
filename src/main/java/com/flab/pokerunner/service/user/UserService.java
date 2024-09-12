@@ -6,13 +6,18 @@ import com.flab.pokerunner.domain.dto.UuidRequestDTO;
 import com.flab.pokerunner.domain.entity.PokemonJpo;
 import com.flab.pokerunner.domain.entity.UserJpo;
 import com.flab.pokerunner.domain.entity.UserPokemonJpo;
+
+import com.flab.pokerunner.repository.UserRepository;
+
 import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
 import com.flab.pokerunner.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,12 +45,14 @@ public class UserService {
             return false;
         }
 
+
         UserJpo userJpo = UserJpo.builder()
                 .uuid(userSignUpRequestDTO.getUuid())
                 .nickname(userSignUpRequestDTO.getNickname())
                 .address(userSignUpRequestDTO.getAddress())
                 .createdAt(LocalDateTime.now())
                 .build();
+
 
         UserJpo savedUser = userRepository.save(userJpo);
         saveUserPokemon(userSignUpRequestDTO, savedUser.getId());
@@ -86,5 +93,11 @@ public class UserService {
                 .experience(userPokemonJpo.getExperience())
                 .defaultPokemon(userPokemonJpo.isDefaultPokemon())
                 .build();
+
+                .createdDt(LocalDateTime.now())
+                .build();
+
+        userPokemonRepository.save(userPokemon);
+
     }
 }
