@@ -18,7 +18,7 @@ public class UserPokemonJpoTest {
                 .evolutionStatus("0")
                 .level(1)
                 .experience(0)
-                .createdDt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         // When
@@ -40,7 +40,7 @@ public class UserPokemonJpoTest {
                 .evolutionStatus("0")
                 .level(1)
                 .experience(0)
-                .createdDt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         // When
@@ -62,7 +62,7 @@ public class UserPokemonJpoTest {
                 .evolutionStatus("0")
                 .level(1)
                 .experience(0)
-                .createdDt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         // When
@@ -84,7 +84,7 @@ public class UserPokemonJpoTest {
                 .evolutionStatus("1")
                 .level(1)
                 .experience(0)
-                .createdDt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         // When
