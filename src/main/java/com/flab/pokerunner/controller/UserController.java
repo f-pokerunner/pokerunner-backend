@@ -1,8 +1,11 @@
 package com.flab.pokerunner.controller;
 
+import com.flab.pokerunner.domain.dto.UserPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSignUpRequestDTO;
+import com.flab.pokerunner.domain.dto.UserUuidDto;
 import com.flab.pokerunner.domain.dto.UuidRequestDTO;
 import com.flab.pokerunner.service.user.UserService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -42,6 +45,12 @@ public class UserController {
         } else {
             return new ResponseEntity<>("User logged in.", HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/pokemons")
+    public ResponseEntity<List<UserPokemonDto>> getUserPokemons(@RequestBody UserUuidDto userUuidDto) {
+        List<UserPokemonDto> userPokemonDtos = userService.getUserPokemons(userUuidDto.getUuid());
+        return ResponseEntity.ok(userPokemonDtos);
     }
 
 

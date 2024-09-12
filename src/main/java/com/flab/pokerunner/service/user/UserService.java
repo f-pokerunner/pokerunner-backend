@@ -1,15 +1,23 @@
 package com.flab.pokerunner.service.user;
 
+import com.flab.pokerunner.domain.dto.UserPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSignUpRequestDTO;
 import com.flab.pokerunner.domain.dto.UuidRequestDTO;
 import com.flab.pokerunner.domain.entity.PokemonJpo;
 import com.flab.pokerunner.domain.entity.UserJpo;
 import com.flab.pokerunner.domain.entity.UserPokemonJpo;
+
 import com.flab.pokerunner.repository.UserRepository;
+
 import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
+import com.flab.pokerunner.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -51,6 +59,7 @@ public class UserService {
         return true;
     }
 
+
     private void saveUserPokemon(UserSignUpRequestDTO userSignUpRequestDTO, int userId) {
         PokemonJpo pokemon = pokemonRepository.findByPokemonName(userSignUpRequestDTO.getPokemonName());
 
@@ -64,9 +73,31 @@ public class UserService {
                 .userUuid(userSignUpRequestDTO.getUuid())
                 .evolutionStatus("1")
                 .experience(1)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        userPokemonRepository.save(userPokemon);
+    }
+
+    public List<UserPokemonDto> getUserPokemons(String userUuid) {
+        log.info("getting user {} pokemons...", userUuid);
+        List<UserPokemonJpo> userPokemonJpos = userPokemonRepository.findAllByUserUuid(userUuid);
+        return userPokemonJpos.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    private UserPokemonDto convertToDto(UserPokemonJpo userPokemonJpo) {
+        return UserPokemonDto.builder()
+                .pokemonName(userPokemonJpo.getNickname())
+                .evolutionStatus(userPokemonJpo.getEvolutionStatus())
+                .health(userPokemonJpo.getHealth())
+                .experience(userPokemonJpo.getExperience())
+                .defaultPokemon(userPokemonJpo.isDefaultPokemon())
+                .build();
+
                 .createdDt(LocalDateTime.now())
                 .build();
 
         userPokemonRepository.save(userPokemon);
+
     }
 }

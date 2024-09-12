@@ -5,7 +5,9 @@ import com.flab.pokerunner.domain.event.running.PokemonSearched;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -15,6 +17,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class UserPokemonJpo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +34,9 @@ public class UserPokemonJpo {
     @Column(name = "default_pokemon")
     public boolean defaultPokemon;
     @CreatedDate
-    @Column(name = "created_dt", updatable = false)
-    public LocalDateTime createdDt;
+    @Column(name = "created_at",updatable = false)
+    public LocalDateTime createdAt;
+
     @Column(name = "evolution_status")
     private String evolutionStatus;
 
