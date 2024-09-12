@@ -9,6 +9,7 @@ import com.flab.pokerunner.repository.UserRepository;
 import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,30 +37,36 @@ public class UserService {
             return false;
         }
 
+
         UserJpo userJpo = UserJpo.builder()
                 .uuid(userSignUpRequestDTO.getUuid())
                 .nickname(userSignUpRequestDTO.getNickname())
                 .address(userSignUpRequestDTO.getAddress())
+                .createdAt(LocalDateTime.now())
                 .build();
 
-        userRepository.save(userJpo);
+
+        UserJpo savedUser = userRepository.save(userJpo);
+        saveUserPokemon(userSignUpRequestDTO, savedUser.getId());
         return true;
     }
 
-    public void saveUserPokemon(UserSignUpRequestDTO userSignUpRequestDTO) {
+    private void saveUserPokemon(UserSignUpRequestDTO userSignUpRequestDTO, int userId) {
         PokemonJpo pokemon = pokemonRepository.findByPokemonName(userSignUpRequestDTO.getPokemonName());
 
         UserPokemonJpo userPokemon = UserPokemonJpo.builder()
                 .defaultPokemon(true)
                 .pokemonId(pokemon.getId())
+                .nickname(pokemon.getPokemonName())
+                .userId(userId)
                 .level(1)
                 .health(100)
                 .userUuid(userSignUpRequestDTO.getUuid())
-                .evolutionStatus("STAGE_ONE")
+                .evolutionStatus("1")
                 .experience(1)
+                .createdDt(LocalDateTime.now())
                 .build();
 
         userPokemonRepository.save(userPokemon);
-
     }
 }

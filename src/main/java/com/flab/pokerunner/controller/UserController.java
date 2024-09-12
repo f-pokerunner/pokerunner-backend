@@ -37,11 +37,10 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody UserSignUpRequestDTO userSignUpRequestDTO) {
         boolean isnNewUser = userService.signup(userSignUpRequestDTO);
-        userService.saveUserPokemon(userSignUpRequestDTO);
         if (isnNewUser) {
-            return new ResponseEntity<>("UserJpo created successfully", HttpStatus.CREATED);
+            return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>("UserJpo logged in.", HttpStatus.OK);
+            return new ResponseEntity<>("User logged in.", HttpStatus.OK);
         }
     }
 
