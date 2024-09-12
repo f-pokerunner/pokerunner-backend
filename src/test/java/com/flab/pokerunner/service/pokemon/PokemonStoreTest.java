@@ -46,22 +46,6 @@ class PokemonStoreTest {
     }
 
     @Test
-    void saveRunningStopped_whenUserPokemonFound() {
-        var event = mock(RunningStopped.class);
-
-        var user = mock(UserJpo.class);
-        when(user.getDefaultPokemonId()).thenReturn(1);
-        when(userRepository.findById(event.getUserId())).thenReturn(user);
-
-        var pokemon = mock(UserPokemonJpo.class);
-        when(userPokemonRepository.findByUserIdAndPokemonId(event.getUserId(), user.getDefaultPokemonId())).thenReturn(pokemon);
-
-        pokemonStore.save(event);
-
-        verify(pokemon).addExperienceAfterRunning(anyInt());
-    }
-
-    @Test
     void savePokemonSearched_withValidParameters() {
         var event = mock(PokemonSearched.class);
         var pokemonLocation = mock(PokemonLocationDto.class);

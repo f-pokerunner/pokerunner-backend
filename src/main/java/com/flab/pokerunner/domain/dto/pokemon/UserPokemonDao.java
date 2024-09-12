@@ -9,6 +9,7 @@ public class UserPokemonDao {
     public int userId;
     public int currentExp;
     public int evolutionStatus;
+    public int level;
     public String pokemonName;
     public String imageUrl;
 }
