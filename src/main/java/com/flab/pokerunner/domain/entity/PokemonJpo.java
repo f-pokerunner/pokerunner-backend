@@ -23,9 +23,8 @@ public class PokemonJpo {
     @Column(name = "pokemon_name")
     private String pokemonName;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "evolution_status")
-    private EvolutionStatus evolutionStatus;
+    private String evolutionStatus;
 
     @Column(name = "image_url")
     private String imageUrl;
