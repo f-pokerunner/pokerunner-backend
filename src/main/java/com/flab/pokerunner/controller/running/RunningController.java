@@ -2,6 +2,7 @@ package com.flab.pokerunner.controller.running;
 
 import com.flab.pokerunner.domain.command.running.StartRunningCommand;
 import com.flab.pokerunner.domain.command.running.StopRunningCommand;
+import com.flab.pokerunner.domain.dto.response.StopRunningResponse;
 import com.flab.pokerunner.service.running.RunningService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class RunningController {
     }
 
     @PostMapping("/stop-running")
-    public ResponseEntity<String> stopRunning(@RequestBody StopRunningCommand command) {
-        runningService.stop(command);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<StopRunningResponse> stopRunning(@RequestBody StopRunningCommand command) {
+        StopRunningResponse stopRunningResponse = runningService.stop(command);
+        return ResponseEntity.ok(stopRunningResponse);
     }
 }

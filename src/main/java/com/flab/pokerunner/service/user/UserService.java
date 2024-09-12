@@ -112,5 +112,6 @@ public class UserService {
         }
         newDefaultPokemon.setDefaultPokemon(true);
         userPokemonRepository.save(newDefaultPokemon);
+
     }
 }
