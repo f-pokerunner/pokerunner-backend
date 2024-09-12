@@ -20,7 +20,7 @@ public class UserPokemonJdbcRepository {
                        p.pokemon_name      AS pokemonName,
                        p.image_url         AS imageUrl
                 FROM users u
-                         JOIN user_pokemon up ON up.user_id = u.id
+                         JOIN user_pokemon up ON up.user_id = u.id AND u.default_pokemon_id = up.pokemon_id
                          JOIN pokemon p ON up.pokemon_id = p.id
                 WHERE u.id = ?
                 """;
