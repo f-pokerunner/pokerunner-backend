@@ -12,7 +12,6 @@ public class GateWay {
     private final ApplicationEventPublisher eventPublisher;
 
     public void publish(Events events) {
-        System.out.println("Event: " + events);
         this.eventPublisher.publishEvent(events);
     }
 }
