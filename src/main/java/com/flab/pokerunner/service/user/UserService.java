@@ -2,6 +2,7 @@ package com.flab.pokerunner.service.user;
 
 import com.flab.pokerunner.domain.dto.AddPokemonDto;
 import com.flab.pokerunner.domain.dto.UserPokemonDto;
+import com.flab.pokerunner.domain.dto.UserRunningInfoDto;
 import com.flab.pokerunner.domain.dto.UserSetDefaultPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSignUpRequestDTO;
 import com.flab.pokerunner.domain.dto.UuidRequestDTO;
@@ -10,12 +11,14 @@ import com.flab.pokerunner.domain.entity.UserJpo;
 import com.flab.pokerunner.domain.entity.UserPokemonJpo;
 
 
+import com.flab.pokerunner.domain.entity.UserRunningJpo;
 import com.flab.pokerunner.repository.UserRepository;
 
 
 import com.flab.pokerunner.exceptions.PokemonNotFoundException;
 import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
+import com.flab.pokerunner.repository.running.UserRunningRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 
@@ -34,6 +37,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PokemonRepository pokemonRepository;
     private final UserPokemonRepository userPokemonRepository;
+    private final UserRunningRepository userRunningRepository;
 
     public boolean checkUuid(UuidRequestDTO uuidRequestDTO) {
         return userRepository.existsByUuid(uuidRequestDTO.getUuid());
@@ -134,4 +138,24 @@ public class UserService {
                 .build();
         userPokemonRepository.save(newUserPokemon);
     }
+
+    public List<UserRunningInfoDto> getUserRunningInfo(String userUuid) {
+        UserJpo user = userRepository.findByUuid(userUuid);
+        List<UserRunningJpo>  userRunningJpos = userRunningRepository.findAllByUserId(user.getId());
+
+        return userRunningJpos.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private UserRunningInfoDto convertToDto(UserRunningJpo userRunningJpo) {
+        return UserRunningInfoDto.builder()
+                .distanceMeter(Integer.parseInt(userRunningJpo.getDistanceMeter())) // Assuming distanceMeter is a String in JPO, converting to int
+                .pace(userRunningJpo.getPace())
+                .startTime(userRunningJpo.getStartTime())
+                .endTime(userRunningJpo.getEndTime())
+                .build();
+    }
+
+
 }
