@@ -38,7 +38,7 @@ public class UserPokemonJpo {
     public LocalDateTime createdAt;
 
     @Column(name = "evolution_status")
-    private String evolutionStatus;
+    public String evolutionStatus;
 
     public static UserPokemonJpo from(PokemonSearched event, PokemonLocationDto pokemonLocationDto) {
         return UserPokemonJpo.builder()
@@ -49,12 +49,31 @@ public class UserPokemonJpo {
                 .evolutionStatus(pokemonLocationDto.getEvolutionStatus())
                 .level(1)
                 .experience(0)
-                .createdDt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 
     public void addExperienceAfterRunning(int distanceMeter) {
-        experience += distanceMeter / 10;
+        int remainingExperience = distanceMeter / 10;
+
+        while (remainingExperience > 0) {
+            int requiredExperienceForNextLevel = 100 - this.experience;
+
+            if (remainingExperience >= requiredExperienceForNextLevel) {
+                remainingExperience -= requiredExperienceForNextLevel;
+                this.level++;
+                this.experience = 0;
+
+                if (this.level == 3 || this.level == 5) {
+                    int evolution = Integer.parseInt(this.evolutionStatus) + 1;
+                    this.evolutionStatus = String.valueOf(evolution);
+                }
+
+            } else {
+                this.experience += remainingExperience;
+                remainingExperience = 0;
+            }
+        }
     }
 
     public void subtractHealth(int damage) {

@@ -8,6 +8,7 @@ import com.flab.pokerunner.domain.event.running.RunningStopped;
 import com.flab.pokerunner.repository.UserRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ public class PokemonStore {
 
     private final UserRepository userRepository;
     private final UserPokemonRepository userPokemonRepository;
+    private final Environment env;
 
     @Transactional
     public void save(RunningStopped event) {
@@ -27,7 +29,7 @@ public class PokemonStore {
         UserPokemonJpo foundPokemon = userPokemonRepository.findByUserIdAndPokemonId(event.getUserId(), defaultPokemonId);
 
         if (foundPokemon != null) {
-            int totalDistanceMeter = Double.valueOf(event.getTotalDistanceMeter()).intValue();
+            int totalDistanceMeter = event.getTotalDistanceMeter().intValue();
             foundPokemon.addExperienceAfterRunning(totalDistanceMeter);
         }
     }
