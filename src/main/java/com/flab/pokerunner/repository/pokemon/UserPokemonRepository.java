@@ -10,6 +10,11 @@ public interface UserPokemonRepository extends JpaRepository<UserPokemonJpo, Int
 
     List<UserPokemonJpo> findAllByUserUuid(String userUuid);
 
+
     UserPokemonJpo findByUserIdAndPokemonId(int userId, int pokemonId);
+
+    UserPokemonJpo findByUserUuidAndDefaultPokemon(String userUuid, boolean defaultPokemon);
+
+    UserPokemonJpo findByUserUuidAndNickname(String userUuid, String nickname);
 
 }

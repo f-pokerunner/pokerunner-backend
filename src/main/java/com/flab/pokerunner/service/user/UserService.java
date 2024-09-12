@@ -1,17 +1,20 @@
 package com.flab.pokerunner.service.user;
 
 import com.flab.pokerunner.domain.dto.UserPokemonDto;
+import com.flab.pokerunner.domain.dto.UserSetDefaultPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSignUpRequestDTO;
 import com.flab.pokerunner.domain.dto.UuidRequestDTO;
 import com.flab.pokerunner.domain.entity.PokemonJpo;
 import com.flab.pokerunner.domain.entity.UserJpo;
 import com.flab.pokerunner.domain.entity.UserPokemonJpo;
 
+
 import com.flab.pokerunner.repository.UserRepository;
 
+
+import com.flab.pokerunner.exceptions.PokemonNotFoundException;
 import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
-import com.flab.pokerunner.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 
@@ -93,11 +96,21 @@ public class UserService {
                 .experience(userPokemonJpo.getExperience())
                 .defaultPokemon(userPokemonJpo.isDefaultPokemon())
                 .build();
+    }
 
-                .createdDt(LocalDateTime.now())
-                .build();
+    public void setDefaultPokemon(UserSetDefaultPokemonDto userSetDefaultPokemonDto) {
 
-        userPokemonRepository.save(userPokemon);
+        UserPokemonJpo currentDefaultPokemon = userPokemonRepository.findByUserUuidAndDefaultPokemon(userSetDefaultPokemonDto.getUuid(), true);
+        if (currentDefaultPokemon != null) {
+            currentDefaultPokemon.setDefaultPokemon(false);
+            userPokemonRepository.save(currentDefaultPokemon);
+        }
 
+        UserPokemonJpo newDefaultPokemon = userPokemonRepository.findByUserUuidAndNickname(userSetDefaultPokemonDto.getUuid(), userSetDefaultPokemonDto.getPokemonName());
+        if (newDefaultPokemon == null) {
+            throw new PokemonNotFoundException("Requested Pokémon not found");
+        }
+        newDefaultPokemon.setDefaultPokemon(true);
+        userPokemonRepository.save(newDefaultPokemon);
     }
 }
