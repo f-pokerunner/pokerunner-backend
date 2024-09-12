@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PokemonRepository extends JpaRepository<PokemonJpo, Integer> {
     PokemonJpo findByPokemonName(String pokemonName);
 
-    PokemonJpo findByPokemonId(int pokemonId);
+    PokemonJpo findByPokemonNameAndEvolutionStatus(String pokemonName, String evolutionStatus);
 }

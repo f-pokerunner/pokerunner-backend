@@ -47,10 +47,11 @@ public class UserService {
         return userRepository.existsByNickname(nickname);
     }
 
-    public boolean signup(UserSignUpRequestDTO userSignUpRequestDTO) {
+    public int signup(UserSignUpRequestDTO userSignUpRequestDTO) {
         if (userRepository.existsByUuid(userSignUpRequestDTO.getUuid())) {
             log.info("UserJpo with UUID {} already exists.", userSignUpRequestDTO.getUuid());
-            return false;
+            UserJpo user = userRepository.findByUuid(userSignUpRequestDTO.getUuid());
+            return user.getId();
         }
 
 
@@ -64,7 +65,7 @@ public class UserService {
 
         UserJpo savedUser = userRepository.save(userJpo);
         saveUserPokemon(userSignUpRequestDTO, savedUser.getId());
-        return true;
+        return savedUser.getId();
     }
 
 
@@ -94,7 +95,7 @@ public class UserService {
     }
 
     private UserPokemonDto convertToDto(UserPokemonJpo userPokemonJpo) {
-        PokemonJpo pokemonJpo = pokemonRepository.findByPokemonId(userPokemonJpo.getPokemonId());
+        PokemonJpo pokemonJpo = pokemonRepository.findByPokemonNameAndEvolutionStatus(userPokemonJpo.getNickname(), userPokemonJpo.getEvolutionStatus());
         return UserPokemonDto.builder()
                 .pokemonName(userPokemonJpo.getNickname())
                 .evolutionStatus(userPokemonJpo.getEvolutionStatus())
