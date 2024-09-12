@@ -1,6 +1,6 @@
 package com.flab.pokerunner.service.cron;
 
-import com.flab.pokerunner.domain.dto.UserRunningTimeDto;
+import com.flab.pokerunner.domain.dto.running.UserRunningTimeDto;
 import com.flab.pokerunner.domain.entity.UserPokemonJpo;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
 import com.flab.pokerunner.repository.running.UserRunningJdbcRepository;

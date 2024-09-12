@@ -1,7 +1,7 @@
 package com.flab.pokerunner.repository.running;
 
-import com.flab.pokerunner.domain.dto.UserRunningSummaryDto;
-import com.flab.pokerunner.domain.dto.UserRunningTimeDto;
+import com.flab.pokerunner.domain.dto.running.UserRunningSummaryDao;
+import com.flab.pokerunner.domain.dto.running.UserRunningTimeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,7 +14,7 @@ import java.util.List;
 public class UserRunningJdbcRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public List<UserRunningSummaryDto> findUserRunningSummary() {
+    public List<UserRunningSummaryDao> findUserRunningSummary() {
         String sql = """
                 WITH RankedRuns AS (SELECT user_id,
                                            gu_address,
@@ -50,8 +50,8 @@ public class UserRunningJdbcRepository {
         ));
     }
 
-    private RowMapper<UserRunningSummaryDto> userRunningSummaryDtoRowMapper() {
-        return (rs, rowNum) -> new UserRunningSummaryDto(
+    private RowMapper<UserRunningSummaryDao> userRunningSummaryDtoRowMapper() {
+        return (rs, rowNum) -> new UserRunningSummaryDao(
                 rs.getInt("userId"),
                 rs.getString("guAddress"),
                 rs.getString("totalDistance")

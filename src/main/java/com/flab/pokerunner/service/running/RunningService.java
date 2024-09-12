@@ -5,11 +5,13 @@ import com.flab.pokerunner.domain.command.running.StartRunningCommand;
 import com.flab.pokerunner.domain.command.running.StopRunningCommand;
 import com.flab.pokerunner.domain.dto.pokemon.UserPokemonDao;
 import com.flab.pokerunner.domain.dto.response.StopRunningResponse;
+import com.flab.pokerunner.domain.dto.running.UserRunningSummaryDto;
 import com.flab.pokerunner.repository.pokemon.UserPokemonJdbcRepository;
 import com.flab.pokerunner.service.NHNMapService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -32,11 +34,12 @@ public class RunningService {
     public StopRunningResponse stop(StopRunningCommand command) {
         int userId = command.getUserId();
         RunningSimulator simulator = simulators.remove(userId);
+        UserRunningSummaryDto userRunningSummaryDto = null;
         if (simulator != null) {
-            simulator.stop();
+            userRunningSummaryDto = simulator.stop();
         }
 
         UserPokemonDao userPokemonDao = userPokemonJdbcRepository.findUserPokemonByUserId(command.userId);
-        return StopRunningResponse.of(userPokemonDao);
+        return StopRunningResponse.from(userPokemonDao, Objects.requireNonNull(userRunningSummaryDto));
     }
 }

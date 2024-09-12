@@ -10,9 +10,6 @@ public interface PokemonRepository extends JpaRepository<PokemonJpo, Integer> {
 
     PokemonJpo findByPokemonNameAndEvolutionStatus(String pokemonName, String evolutionStatus);
 
-    PokemonJpo findById(int pokemonId);
-
-
     List<PokemonJpo> findAllByEvolutionStatus(String evolutionStatus);
 
 }

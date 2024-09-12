@@ -1,9 +1,10 @@
-package com.flab.pokerunner.domain.dto;
+package com.flab.pokerunner.domain.dto.running;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Builder
 @Getter

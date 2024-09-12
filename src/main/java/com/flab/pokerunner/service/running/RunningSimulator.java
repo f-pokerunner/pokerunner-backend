@@ -3,6 +3,7 @@ package com.flab.pokerunner.service.running;
 import com.flab.pokerunner.core.GateWay;
 import com.flab.pokerunner.domain.command.running.StartRunningCommand;
 import com.flab.pokerunner.domain.dto.nhn.LocationDto;
+import com.flab.pokerunner.domain.dto.running.UserRunningSummaryDto;
 import com.flab.pokerunner.domain.event.running.PokemonSearched;
 import com.flab.pokerunner.domain.event.running.RunningStarted;
 import com.flab.pokerunner.domain.event.running.RunningStopped;
@@ -36,7 +37,7 @@ public class RunningSimulator {
         this.currentLat = Double.parseDouble(command.lat);
         this.currentLng = Double.parseDouble(command.lon);
         this.direction = new Random().nextDouble() * 2 * Math.PI;
-        this.speed = 30.0; // 30 m/s (108 km/h)
+        this.speed = 100.0; // 30 m/s (108 km/h)
         this.totalDistance = 0.0;
         this.NHNMapService = NHNMapService;
         this.gateWay = gateWay;
@@ -58,7 +59,7 @@ public class RunningSimulator {
         }
     }
 
-    public void stop() {
+    public UserRunningSummaryDto stop() {
         if (isRunning.compareAndSet(true, false)) {
             executor.shutdown();
             long endTime = System.currentTimeMillis();
@@ -81,7 +82,10 @@ public class RunningSimulator {
             log.info("평균 속도: {} km/h", averageSpeed);
 
             gateWay.publish(new RunningStopped(userId, totalDistance, averageSpeed, pace, LocalDateTime.now()));
+
+            return new UserRunningSummaryDto(totalDistance, pace, averageSpeed, duration);
         }
+        return null;
     }
 
     private void updatePosition() {

@@ -1,4 +1,4 @@
-package com.flab.pokerunner.domain.dto;
+package com.flab.pokerunner.domain.dto.running;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
