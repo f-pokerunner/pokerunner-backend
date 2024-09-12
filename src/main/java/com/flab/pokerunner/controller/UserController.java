@@ -4,7 +4,6 @@ import com.flab.pokerunner.domain.dto.AddPokemonDto;
 import com.flab.pokerunner.domain.dto.UserPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSetDefaultPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSignUpRequestDTO;
-import com.flab.pokerunner.domain.dto.UserUuidDto;
 import com.flab.pokerunner.domain.dto.UuidRequestDTO;
 import com.flab.pokerunner.service.user.UserService;
 import java.util.List;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.web.bind.annotation.*;
 
 
 @Slf4j
@@ -54,9 +50,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/pokemons")
-    public ResponseEntity<List<UserPokemonDto>> getUserPokemons(@RequestBody UserUuidDto userUuidDto) {
-        List<UserPokemonDto> userPokemonDtos = userService.getUserPokemons(userUuidDto.getUuid());
+    @GetMapping("/pokemons/{user_uuid}")
+    public ResponseEntity<List<UserPokemonDto>> getUserPokemons(@PathVariable String user_uuid) {
+        List<UserPokemonDto> userPokemonDtos = userService.getUserPokemons(user_uuid);
         return ResponseEntity.ok(userPokemonDtos);
     }
 
