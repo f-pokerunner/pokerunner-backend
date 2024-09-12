@@ -1,6 +1,8 @@
 package com.flab.pokerunner.controller;
 
+import com.flab.pokerunner.domain.dto.AddPokemonDto;
 import com.flab.pokerunner.domain.dto.UserPokemonDto;
+import com.flab.pokerunner.domain.dto.UserSetDefaultPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSignUpRequestDTO;
 import com.flab.pokerunner.domain.dto.UserUuidDto;
 import com.flab.pokerunner.domain.dto.UuidRequestDTO;
@@ -10,7 +12,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import org.springframework.web.bind.annotation.*;
+
 
 @Slf4j
 @RequestMapping("/user")
@@ -36,9 +48,9 @@ public class UserController {
     public ResponseEntity<String> signup(@RequestBody UserSignUpRequestDTO userSignUpRequestDTO) {
         boolean isnNewUser = userService.signup(userSignUpRequestDTO);
         if (isnNewUser) {
-            return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+            return new ResponseEntity<>("User created successfully.", HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>("User logged in.", HttpStatus.OK);
+            return new ResponseEntity<>("User uuid already exists.", HttpStatus.CONFLICT);
         }
     }
 
@@ -48,11 +60,17 @@ public class UserController {
         return ResponseEntity.ok(userPokemonDtos);
     }
 
+    @PutMapping("/pokemon/default")
+    public ResponseEntity<String> setDefaultPokemon(@RequestBody UserSetDefaultPokemonDto userSetDefaultPokemonDto) {
+        userService.setDefaultPokemon(userSetDefaultPokemonDto);
+        return ResponseEntity.ok("Pokemon saved as default.");
+    }
 
-
-
-
-
+    @PostMapping("/pokemon")
+    public ResponseEntity<String> addUserPokemon(@RequestBody AddPokemonDto addPokemonDto){
+        userService.addUserPokemon(addPokemonDto);
+        return ResponseEntity.ok("New Pokemon saved.");
+    }
 
 
 }

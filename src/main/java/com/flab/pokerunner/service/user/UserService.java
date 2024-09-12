@@ -1,14 +1,19 @@
 package com.flab.pokerunner.service.user;
 
+import com.flab.pokerunner.domain.dto.AddPokemonDto;
 import com.flab.pokerunner.domain.dto.UserPokemonDto;
+import com.flab.pokerunner.domain.dto.UserSetDefaultPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSignUpRequestDTO;
 import com.flab.pokerunner.domain.dto.UuidRequestDTO;
 import com.flab.pokerunner.domain.entity.PokemonJpo;
 import com.flab.pokerunner.domain.entity.UserJpo;
 import com.flab.pokerunner.domain.entity.UserPokemonJpo;
 
+
 import com.flab.pokerunner.repository.UserRepository;
 
+
+import com.flab.pokerunner.exceptions.PokemonNotFoundException;
 import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
 import jakarta.transaction.Transactional;
@@ -92,5 +97,41 @@ public class UserService {
                 .experience(userPokemonJpo.getExperience())
                 .defaultPokemon(userPokemonJpo.isDefaultPokemon())
                 .build();
+    }
+
+    public void setDefaultPokemon(UserSetDefaultPokemonDto userSetDefaultPokemonDto) {
+
+        UserPokemonJpo currentDefaultPokemon = userPokemonRepository.findByUserUuidAndDefaultPokemon(userSetDefaultPokemonDto.getUuid(), true);
+        if (currentDefaultPokemon != null) {
+            currentDefaultPokemon.setDefaultPokemon(false);
+            userPokemonRepository.save(currentDefaultPokemon);
+        }
+
+        UserPokemonJpo newDefaultPokemon = userPokemonRepository.findByUserUuidAndNickname(userSetDefaultPokemonDto.getUuid(), userSetDefaultPokemonDto.getPokemonName());
+        if (newDefaultPokemon == null) {
+            throw new PokemonNotFoundException("Requested Pokémon not found");
+        }
+        newDefaultPokemon.setDefaultPokemon(true);
+        userPokemonRepository.save(newDefaultPokemon);
+
+    }
+
+    public void addUserPokemon(AddPokemonDto addPokemonDto){
+
+        UserJpo user = userRepository.findByUuid(addPokemonDto.getUuid());
+        PokemonJpo pokemon = pokemonRepository.findByPokemonName(addPokemonDto.getPokemonName());
+        UserPokemonJpo newUserPokemon =UserPokemonJpo.builder()
+                .defaultPokemon(false)
+                .nickname(pokemon.getPokemonName())
+                .pokemonId(pokemon.getId())
+                .health(100)
+                .experience(1)
+                .level(1)
+                .userId(user.getId())
+                .userUuid(user.getUuid())
+                .evolutionStatus("1")
+                .createdAt(LocalDateTime.now())
+                .build();
+        userPokemonRepository.save(newUserPokemon);
     }
 }
