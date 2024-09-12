@@ -1,5 +1,6 @@
 package com.flab.pokerunner.service.user;
 
+import com.flab.pokerunner.domain.dto.AddPokemonDto;
 import com.flab.pokerunner.domain.dto.UserPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSetDefaultPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSignUpRequestDTO;
@@ -113,5 +114,24 @@ public class UserService {
         newDefaultPokemon.setDefaultPokemon(true);
         userPokemonRepository.save(newDefaultPokemon);
 
+    }
+
+    public void addUserPokemon(AddPokemonDto addPokemonDto){
+
+        UserJpo user = userRepository.findByUuid(addPokemonDto.getUuid());
+        PokemonJpo pokemon = pokemonRepository.findByPokemonName(addPokemonDto.getPokemonName());
+        UserPokemonJpo newUserPokemon =UserPokemonJpo.builder()
+                .defaultPokemon(false)
+                .nickname(pokemon.getPokemonName())
+                .pokemonId(pokemon.getId())
+                .health(100)
+                .experience(1)
+                .level(1)
+                .userId(user.getId())
+                .userUuid(user.getUuid())
+                .evolutionStatus("1")
+                .createdAt(LocalDateTime.now())
+                .build();
+        userPokemonRepository.save(newUserPokemon);
     }
 }
