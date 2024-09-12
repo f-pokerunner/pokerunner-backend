@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -36,10 +37,16 @@ public class PokemonSpotStore {
 
         Random random = new Random();
         int randomIndex = random.nextInt(pokemonIds.size());
-        PokemonJpo randomFoundPokemon = pokemonRepository.findById(randomIndex);
+        int randomPokemonId = pokemonIds.get(randomIndex);
+        Optional<PokemonJpo> randomPokemon = pokemonRepository.findById(randomPokemonId);
 
-        pokemonLocJdbcRepository.insertPokemonLocation(lat, lon, randomFoundPokemon.getPokemonName());
-        return new PokemonSpotDto(lat, lon, command.getAddress(), randomFoundPokemon.getPokemonName());
+        if (randomPokemon.isPresent()) {
+            PokemonJpo selectedPokemon = randomPokemon.get();
+            pokemonLocJdbcRepository.insertPokemonLocation(lat, lon, selectedPokemon.getPokemonName());
+            return new PokemonSpotDto(lat, lon, command.getAddress(), selectedPokemon.getPokemonName());
+        } else {
+            return new PokemonSpotDto(lat, lon, command.getAddress(), "Unknown Pokemon");
+        }
     }
 
     public List<PokemonLocationDto> searchPokemon(PokemonSearched event) {
