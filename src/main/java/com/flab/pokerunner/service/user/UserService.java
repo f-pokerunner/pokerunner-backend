@@ -1,33 +1,23 @@
 package com.flab.pokerunner.service.user;
 
-import com.flab.pokerunner.domain.dto.AddPokemonDto;
-import com.flab.pokerunner.domain.dto.UserPokemonDto;
-import com.flab.pokerunner.domain.dto.UserRunningInfoDto;
-import com.flab.pokerunner.domain.dto.UserSetDefaultPokemonDto;
-import com.flab.pokerunner.domain.dto.UserSignUpRequestDTO;
-import com.flab.pokerunner.domain.dto.UuidRequestDTO;
+import com.flab.pokerunner.domain.dto.*;
 import com.flab.pokerunner.domain.entity.PokemonJpo;
 import com.flab.pokerunner.domain.entity.UserJpo;
 import com.flab.pokerunner.domain.entity.UserPokemonJpo;
-
-
 import com.flab.pokerunner.domain.entity.UserRunningJpo;
-import com.flab.pokerunner.repository.UserRepository;
-
-
 import com.flab.pokerunner.exceptions.PokemonNotFoundException;
+import com.flab.pokerunner.repository.UserRepository;
 import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
 import com.flab.pokerunner.repository.running.UserRunningRepository;
 import jakarta.transaction.Transactional;
-import java.time.LocalDateTime;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -123,7 +113,7 @@ public class UserService {
     public void addUserPokemon(AddPokemonDto addPokemonDto){
         UserJpo user = userRepository.findByUuid(addPokemonDto.getUuid());
         PokemonJpo pokemon = pokemonRepository.findByPokemonName(addPokemonDto.getPokemonName());
-        UserPokemonJpo newUserPokemon =UserPokemonJpo.builder()
+        UserPokemonJpo newUserPokemon = UserPokemonJpo.builder()
                 .defaultPokemon(false)
                 .nickname(pokemon.getPokemonName())
                 .pokemonId(pokemon.getId())
@@ -140,7 +130,7 @@ public class UserService {
 
     public List<UserRunningInfoDto> getUserRunningInfo(String userUuid) {
         UserJpo user = userRepository.findByUuid(userUuid);
-        List<UserRunningJpo>  userRunningJpos = userRunningRepository.findAllByUserId(user.getId());
+        List<UserRunningJpo> userRunningJpos = userRunningRepository.findAllByUserId(user.getId());
 
         return userRunningJpos.stream()
                 .map(this::convertToDto)

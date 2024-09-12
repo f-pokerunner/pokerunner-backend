@@ -1,6 +1,7 @@
 package com.flab.pokerunner.controller;
 
-import com.flab.pokerunner.domain.command.spot.EvolutionSpotCommand;
+import com.flab.pokerunner.domain.command.spot.PokemonSpotCommand;
+import com.flab.pokerunner.domain.dto.response.PokemonSpotDto;
 import com.flab.pokerunner.service.PokemonSpotStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/pokemon-spots")
+@RequestMapping("/pokemon-spot")
 @RequiredArgsConstructor
-public class EvolutionSpotController {
+public class PokemonSpotController {
 
     private final PokemonSpotStore pokemonSpotStore;
 
     @PostMapping
-    public ResponseEntity<String> createEvolutionSpot(@RequestBody EvolutionSpotCommand command) {
-        String res = pokemonSpotStore.putPokemon(command);
-        return ResponseEntity.ok(res);
+    public ResponseEntity<PokemonSpotDto> createEvolutionSpot(@RequestBody PokemonSpotCommand command) {
+        PokemonSpotDto pokemonSpotDto = pokemonSpotStore.putPokemon(command);
+        return ResponseEntity.ok(pokemonSpotDto);
     }
 }
