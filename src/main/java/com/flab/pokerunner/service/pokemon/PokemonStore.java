@@ -1,14 +1,15 @@
 package com.flab.pokerunner.service.pokemon;
 
 import com.flab.pokerunner.domain.dto.PokemonLocationDto;
+import com.flab.pokerunner.domain.entity.PokemonJpo;
 import com.flab.pokerunner.domain.entity.UserJpo;
 import com.flab.pokerunner.domain.entity.UserPokemonJpo;
 import com.flab.pokerunner.domain.event.running.PokemonSearched;
 import com.flab.pokerunner.domain.event.running.RunningStopped;
 import com.flab.pokerunner.repository.UserRepository;
+import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,7 @@ public class PokemonStore {
 
     private final UserRepository userRepository;
     private final UserPokemonRepository userPokemonRepository;
-    private final Environment env;
+    private final PokemonRepository pokemonRepository;
 
     @Transactional
     public void save(RunningStopped event) {
@@ -29,8 +30,14 @@ public class PokemonStore {
         UserPokemonJpo foundPokemon = userPokemonRepository.findByUserIdAndPokemonId(event.getUserId(), defaultPokemonId);
 
         if (foundPokemon != null) {
+            PokemonJpo pokemonJpo = pokemonRepository.findByPokemonName(foundPokemon.getNickname());
             int totalDistanceMeter = event.getTotalDistanceMeter().intValue();
-            foundPokemon.addExperienceAfterRunning(totalDistanceMeter);
+            foundPokemon.addExperienceAfterRunning(totalDistanceMeter, pokemonJpo);
+
+            pokemonJpo = pokemonRepository.findByPokemonName(foundPokemon.getNickname());
+
+            foundPokemon.pokemonId = pokemonJpo.getId();
+            user.setDefaultPokemonId(foundPokemon.pokemonId);
         }
     }
 

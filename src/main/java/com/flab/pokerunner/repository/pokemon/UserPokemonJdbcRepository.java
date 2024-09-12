@@ -15,12 +15,13 @@ public class UserPokemonJdbcRepository {
         String sql = """
                 SELECT u.id                AS userId,
                        up.experience       AS exp,
-                       up.evolution_status AS es,
+                       up.evolution_status AS evolutionStatus,
+                       up.level            AS level,
                        p.pokemon_name      AS pokemonName,
                        p.image_url         AS imageUrl
                 FROM users u
-                         JOIN user_pokemon up ON u.default_pokemon_id = up.pokemon_id
-                         JOIN pokemon p ON p.id = up.pokemon_id AND p.evolution_status = up.evolution_status
+                         JOIN user_pokemon up ON up.user_id = u.id
+                         JOIN pokemon p ON up.pokemon_id = p.id
                 WHERE u.id = ?
                 """;
 
@@ -28,6 +29,7 @@ public class UserPokemonJdbcRepository {
                 rs.getInt("userId"),
                 rs.getInt("exp"),
                 rs.getInt("evolutionStatus"),
+                rs.getInt("level"),
                 rs.getString("pokemonName"),
                 rs.getString("imageUrl")
         ), userId);

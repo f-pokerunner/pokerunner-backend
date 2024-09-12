@@ -1,104 +1,56 @@
 package com.flab.pokerunner.domain.entity;
 
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class UserPokemonJpoTest {
 
-    @Test
-    void addExperienceAfterRunning_LevelUpCase() {
-        // Given
-        UserPokemonJpo userPokemonJpo = UserPokemonJpo.builder()
-                .userId(1)
-                .pokemonId(1)
-                .nickname("Pikachu")
-                .health(100)
-                .evolutionStatus("0")
-                .level(1)
-                .experience(0)
-                .createdAt(LocalDateTime.now())
-                .build();
+    private UserPokemonJpo userPokemonJpo;
+    private PokemonJpo pokemonJpo;
 
-        // When
-        userPokemonJpo.addExperienceAfterRunning(1000);
-
-        // Then
-        Assertions.assertEquals(2, userPokemonJpo.level);
-        Assertions.assertEquals(0, userPokemonJpo.experience);
-    }
-
-    @Test
-    void addExperienceAfterRunning_EvolutionCase() {
-        // Given
-        UserPokemonJpo userPokemonJpo = UserPokemonJpo.builder()
-                .userId(1)
-                .pokemonId(1)
-                .nickname("Pikachu")
-                .health(100)
-                .evolutionStatus("0")
-                .level(1)
-                .experience(0)
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        // When
-        userPokemonJpo.addExperienceAfterRunning(3000);
-
-        // Then
-        Assertions.assertEquals(4, userPokemonJpo.level);
-        Assertions.assertEquals("1", userPokemonJpo.evolutionStatus);
-    }
-
-    @Test
-    void addExperienceAfterRunning_SmallDistanceCase() {
-        // Given
-        UserPokemonJpo userPokemonJpo = UserPokemonJpo.builder()
-                .userId(1)
-                .pokemonId(1)
-                .nickname("Pikachu")
-                .health(100)
-                .evolutionStatus("0")
-                .level(1)
-                .experience(0)
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        // When
-        userPokemonJpo.addExperienceAfterRunning(500);
-
-        // Then
-        Assertions.assertEquals(1, userPokemonJpo.level);
-        Assertions.assertEquals(50, userPokemonJpo.experience);
-    }
-
-    @Test
-    void addExperienceAfterRunning_EvolutionAndRemainingExperienceCase() {
-        // Given
-        UserPokemonJpo userPokemonJpo = UserPokemonJpo.builder()
-                .userId(1)
-                .pokemonId(1)
-                .nickname("Pikachu")
-                .health(100)
+    @BeforeEach
+    public void setUp() {
+        userPokemonJpo = UserPokemonJpo.builder()
+                .id(1)
+                .userUuid(null)
+                .nickname("꼬부기")
                 .evolutionStatus("1")
+                .pokemonId(7)
+                .health(30)
                 .level(1)
                 .experience(0)
+                .defaultPokemon(true)
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        // When
-        userPokemonJpo.addExperienceAfterRunning(1300); // exp 130
+        pokemonJpo = PokemonJpo.builder()
+                .id(7)
+                .pokemonName("꼬부기")
+                .evolutionStatus("1")
+                .imageUrl("")
+                .createdDt(LocalDateTime.now())
+                .preEvolutionName(null)
+                .nextEvolutionName("어니부기")
+                .build();
+    }
 
-        // Then
-        Assertions.assertEquals(2, userPokemonJpo.level);
-        Assertions.assertEquals(30, userPokemonJpo.experience);
-        Assertions.assertEquals("1", userPokemonJpo.evolutionStatus);
+    @Test
+    @DisplayName("달린 거리에 따른 경험치 획득 테스트")
+    public void getExpTest() {
+        userPokemonJpo.addExperienceAfterRunning(1500, pokemonJpo); // 경험치 150
 
-        // further evolution check
-        userPokemonJpo.addExperienceAfterRunning(1300); // exp 130
-        Assertions.assertEquals(3, userPokemonJpo.level);
-        Assertions.assertEquals(60, userPokemonJpo.experience);
-        Assertions.assertEquals("2", userPokemonJpo.evolutionStatus);
+        assertThat(userPokemonJpo.getExperience()).isEqualTo(50);
+        assertThat(userPokemonJpo.getLevel()).isEqualTo(2);
+
+        userPokemonJpo.addExperienceAfterRunning(500, pokemonJpo); // 경험치 50 추가
+
+        assertThat(userPokemonJpo.getExperience()).isEqualTo(0);
+        assertThat(userPokemonJpo.getLevel()).isEqualTo(3);
+        assertThat(userPokemonJpo.getNickname()).isEqualTo("어니부기");
     }
 }

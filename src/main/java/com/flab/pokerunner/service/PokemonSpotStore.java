@@ -1,14 +1,18 @@
 package com.flab.pokerunner.service;
 
-import com.flab.pokerunner.domain.command.spot.EvolutionSpotCommand;
+import com.flab.pokerunner.domain.command.spot.PokemonSpotCommand;
 import com.flab.pokerunner.domain.dto.PokemonLocationDto;
 import com.flab.pokerunner.domain.dto.nhn.CoordinatesDto;
+import com.flab.pokerunner.domain.dto.response.PokemonSpotDto;
+import com.flab.pokerunner.domain.entity.PokemonJpo;
 import com.flab.pokerunner.domain.event.running.PokemonSearched;
 import com.flab.pokerunner.repository.PokemonLocJdbcRepository;
+import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -16,18 +20,26 @@ public class PokemonSpotStore {
 
     private final NHNMapService nhnMapService;
     private final PokemonLocJdbcRepository pokemonLocJdbcRepository;
+    private final PokemonRepository pokemonRepository;
 
-    public String putPokemon(EvolutionSpotCommand command) {
+    public PokemonSpotDto putPokemon(PokemonSpotCommand command) {
         CoordinatesDto dto = nhnMapService.getCoordinatesByAddress(command.getAddress());
         if (dto.getHeader().getResultCode() != 0) {
-            return "Fail";
+            return new PokemonSpotDto();
         }
 
         String lat = dto.getAddress().getAdm().get(0).getPosy();
         String lon = dto.getAddress().getAdm().get(0).getPosx();
 
-        pokemonLocJdbcRepository.insertPokemonLocation(lat, lon, command.getPokemonName());
-        return "Success";
+        List<PokemonJpo> allPokemon = pokemonRepository.findAllByEvolutionStatus("1");
+        List<Integer> pokemonIds = allPokemon.stream().map(PokemonJpo::getId).toList();
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(pokemonIds.size());
+        PokemonJpo randomFoundPokemon = pokemonRepository.findById(randomIndex);
+
+        pokemonLocJdbcRepository.insertPokemonLocation(lat, lon, randomFoundPokemon.getPokemonName());
+        return new PokemonSpotDto(lat, lon, command.getAddress(), randomFoundPokemon.getPokemonName());
     }
 
     public List<PokemonLocationDto> searchPokemon(PokemonSearched event) {

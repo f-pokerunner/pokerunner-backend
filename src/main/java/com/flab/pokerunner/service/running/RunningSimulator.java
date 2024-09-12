@@ -36,7 +36,7 @@ public class RunningSimulator {
         this.currentLat = Double.parseDouble(command.lat);
         this.currentLng = Double.parseDouble(command.lon);
         this.direction = new Random().nextDouble() * 2 * Math.PI;
-        this.speed = 300.0;
+        this.speed = 30.0; // 30 m/s (108 km/h)
         this.totalDistance = 0.0;
         this.NHNMapService = NHNMapService;
         this.gateWay = gateWay;
