@@ -20,3 +20,9 @@ spring:
 nhn:
   map:
     url: ${nhn.url}
+
+
+evolution:
+  level:
+    first: 3
+    second: 5
