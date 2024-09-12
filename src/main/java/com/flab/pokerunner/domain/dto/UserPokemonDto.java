@@ -10,6 +10,7 @@ import lombok.Getter;
 public class UserPokemonDto {
     private String pokemonName;
     private String evolutionStatus;
+    private String imageUrl;
     private int health;
     private int experience;
     private boolean defaultPokemon;

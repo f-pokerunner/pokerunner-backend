@@ -94,9 +94,11 @@ public class UserService {
     }
 
     private UserPokemonDto convertToDto(UserPokemonJpo userPokemonJpo) {
+        PokemonJpo pokemonJpo = pokemonRepository.findByPokemonId(userPokemonJpo.getPokemonId());
         return UserPokemonDto.builder()
                 .pokemonName(userPokemonJpo.getNickname())
                 .evolutionStatus(userPokemonJpo.getEvolutionStatus())
+                .imageUrl(pokemonJpo.getImageUrl())
                 .health(userPokemonJpo.getHealth())
                 .experience(userPokemonJpo.getExperience())
                 .defaultPokemon(userPokemonJpo.isDefaultPokemon())
