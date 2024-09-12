@@ -2,6 +2,7 @@ package com.flab.pokerunner.controller;
 
 import com.flab.pokerunner.domain.dto.AddPokemonDto;
 import com.flab.pokerunner.domain.dto.UserPokemonDto;
+import com.flab.pokerunner.domain.dto.UserRunningInfoDto;
 import com.flab.pokerunner.domain.dto.UserSetDefaultPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSignUpRequestDTO;
 import com.flab.pokerunner.domain.dto.UuidRequestDTO;
@@ -67,6 +68,13 @@ public class UserController {
         userService.addUserPokemon(addPokemonDto);
         return ResponseEntity.ok("New Pokemon saved.");
     }
+
+    @GetMapping("/runnings/{user_uuid}")
+    public ResponseEntity<List<UserRunningInfoDto>> getUserRunnings(@PathVariable String user_uuid){
+        List<UserRunningInfoDto> userRunningInfoDtos = userService.getUserRunningInfo(user_uuid);
+        return ResponseEntity.ok(userRunningInfoDtos);
+    }
+
 
 
 }
