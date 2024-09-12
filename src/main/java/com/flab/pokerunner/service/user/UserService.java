@@ -150,10 +150,11 @@ public class UserService {
 
     private UserRunningInfoDto convertToDto(UserRunningJpo userRunningJpo) {
         return UserRunningInfoDto.builder()
-                .distanceMeter(Integer.parseInt(userRunningJpo.getDistanceMeter())) // Assuming distanceMeter is a String in JPO, converting to int
+                .distanceMeter(userRunningJpo.getDistanceMeter())
                 .pace(userRunningJpo.getPace())
                 .startTime(userRunningJpo.getStartTime())
                 .endTime(userRunningJpo.getEndTime())
+                .guAddress(userRunningJpo.getGuAddress())
                 .build();
     }
 

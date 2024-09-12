@@ -5,8 +5,9 @@ import lombok.Builder;
 
 @Builder
 public class UserRunningInfoDto {
-    int distanceMeter;
+    String distanceMeter;
     String pace;
     LocalDateTime startTime;
     LocalDateTime endTime;
+    String guAddress;
 }
