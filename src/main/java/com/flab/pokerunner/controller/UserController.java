@@ -42,13 +42,9 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody UserSignUpRequestDTO userSignUpRequestDTO) {
-        boolean isnNewUser = userService.signup(userSignUpRequestDTO);
-        if (isnNewUser) {
-            return new ResponseEntity<>("User created successfully.", HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("User uuid already exists.", HttpStatus.CONFLICT);
-        }
+    public ResponseEntity<Integer> signup(@RequestBody UserSignUpRequestDTO userSignUpRequestDTO) {
+        int userId = userService.signup(userSignUpRequestDTO);
+        return ResponseEntity.ok(userId);
     }
 
     @GetMapping("/pokemons/{user_uuid}")
