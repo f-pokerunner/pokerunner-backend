@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/evolution-spots")
+@RequestMapping("/pokemon-spots")
 @RequiredArgsConstructor
 public class EvolutionSpotController {
 
