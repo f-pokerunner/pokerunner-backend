@@ -1,5 +1,6 @@
 package com.flab.pokerunner.controller;
 
+import com.flab.pokerunner.domain.dto.AddPokemonDto;
 import com.flab.pokerunner.domain.dto.UserPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSetDefaultPokemonDto;
 import com.flab.pokerunner.domain.dto.UserSignUpRequestDTO;
@@ -43,13 +44,13 @@ public class UserController {
     public ResponseEntity<String> signup(@RequestBody UserSignUpRequestDTO userSignUpRequestDTO) {
         boolean isnNewUser = userService.signup(userSignUpRequestDTO);
         if (isnNewUser) {
-            return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+            return new ResponseEntity<>("User created successfully.", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("User uuid already exists.", HttpStatus.CONFLICT);
         }
     }
 
-    @PostMapping("/pokemons")
+    @GetMapping("/pokemons")
     public ResponseEntity<List<UserPokemonDto>> getUserPokemons(@RequestBody UserUuidDto userUuidDto) {
         List<UserPokemonDto> userPokemonDtos = userService.getUserPokemons(userUuidDto.getUuid());
         return ResponseEntity.ok(userPokemonDtos);
@@ -58,7 +59,13 @@ public class UserController {
     @PutMapping("/pokemon/default")
     public ResponseEntity<String> setDefaultPokemon(@RequestBody UserSetDefaultPokemonDto userSetDefaultPokemonDto) {
         userService.setDefaultPokemon(userSetDefaultPokemonDto);
-        return ResponseEntity.ok("Pokemon saved as default");
+        return ResponseEntity.ok("Pokemon saved as default.");
+    }
+
+    @PostMapping("/pokemon")
+    public ResponseEntity<String> addUserPokemon(@RequestBody AddPokemonDto addPokemonDto){
+        userService.addUserPokemon(addPokemonDto);
+        return ResponseEntity.ok("New Pokemon saved.");
     }
 
 
