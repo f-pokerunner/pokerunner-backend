@@ -94,7 +94,7 @@ public class UserService {
     }
 
     private UserPokemonDto convertToDto(UserPokemonJpo userPokemonJpo) {
-        PokemonJpo pokemonJpo = pokemonRepository.findByPokemonId(userPokemonJpo.getPokemonId());
+        PokemonJpo pokemonJpo = pokemonRepository.findByPokemonNameAndEvolutionStatus(userPokemonJpo.getNickname(), userPokemonJpo.getEvolutionStatus());
         return UserPokemonDto.builder()
                 .pokemonName(userPokemonJpo.getNickname())
                 .evolutionStatus(userPokemonJpo.getEvolutionStatus())
@@ -106,7 +106,6 @@ public class UserService {
     }
 
     public void setDefaultPokemon(UserSetDefaultPokemonDto userSetDefaultPokemonDto) {
-
         UserPokemonJpo currentDefaultPokemon = userPokemonRepository.findByUserUuidAndDefaultPokemon(userSetDefaultPokemonDto.getUuid(), true);
         if (currentDefaultPokemon != null) {
             currentDefaultPokemon.setDefaultPokemon(false);
@@ -119,11 +118,9 @@ public class UserService {
         }
         newDefaultPokemon.setDefaultPokemon(true);
         userPokemonRepository.save(newDefaultPokemon);
-
     }
 
     public void addUserPokemon(AddPokemonDto addPokemonDto){
-
         UserJpo user = userRepository.findByUuid(addPokemonDto.getUuid());
         PokemonJpo pokemon = pokemonRepository.findByPokemonName(addPokemonDto.getPokemonName());
         UserPokemonJpo newUserPokemon =UserPokemonJpo.builder()
