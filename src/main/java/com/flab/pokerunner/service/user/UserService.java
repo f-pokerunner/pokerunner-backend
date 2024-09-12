@@ -12,6 +12,7 @@ import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
 import com.flab.pokerunner.repository.running.UserRunningRepository;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -86,11 +87,13 @@ public class UserService {
     }
 
     private UserPokemonDto convertToDto(UserPokemonJpo userPokemonJpo) {
-        PokemonJpo pokemonJpo = pokemonRepository.findByPokemonNameAndEvolutionStatus(userPokemonJpo.getNickname(), userPokemonJpo.getEvolutionStatus());
+        Optional<PokemonJpo> pokemon = pokemonRepository.findById(userPokemonJpo.getPokemonId());
+        String imageUrl = pokemon.map(PokemonJpo::getImageUrl)
+                .orElse("");
         return UserPokemonDto.builder()
                 .pokemonName(userPokemonJpo.getNickname())
                 .evolutionStatus(userPokemonJpo.getEvolutionStatus())
-                .imageUrl(pokemonJpo.getImageUrl())
+                .imageUrl(imageUrl)
                 .health(userPokemonJpo.getHealth())
                 .experience(userPokemonJpo.getExperience())
                 .defaultPokemon(userPokemonJpo.isDefaultPokemon())
