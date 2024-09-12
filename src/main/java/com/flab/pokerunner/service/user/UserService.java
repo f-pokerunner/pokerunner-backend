@@ -11,7 +11,6 @@ import com.flab.pokerunner.repository.UserRepository;
 
 import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
-import com.flab.pokerunner.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 
@@ -93,11 +92,5 @@ public class UserService {
                 .experience(userPokemonJpo.getExperience())
                 .defaultPokemon(userPokemonJpo.isDefaultPokemon())
                 .build();
-
-                .createdDt(LocalDateTime.now())
-                .build();
-
-        userPokemonRepository.save(userPokemon);
-
     }
 }

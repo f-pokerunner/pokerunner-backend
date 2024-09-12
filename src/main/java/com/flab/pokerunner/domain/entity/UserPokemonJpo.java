@@ -49,7 +49,7 @@ public class UserPokemonJpo {
                 .evolutionStatus(pokemonLocationDto.getEvolutionStatus())
                 .level(1)
                 .experience(0)
-                .createdDt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 
