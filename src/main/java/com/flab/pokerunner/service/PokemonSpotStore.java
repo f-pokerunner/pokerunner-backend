@@ -1,5 +1,6 @@
 package com.flab.pokerunner.service;
 
+import com.flab.pokerunner.domain.command.spot.PokemonSpotAdminCommand;
 import com.flab.pokerunner.domain.command.spot.PokemonSpotCommand;
 import com.flab.pokerunner.domain.dto.PokemonLocationDto;
 import com.flab.pokerunner.domain.dto.nhn.CoordinatesDto;
@@ -55,5 +56,26 @@ public class PokemonSpotStore {
             pokemonLocJdbcRepository.updateOwnerId(it.getId(), event.getUserId());
         });
         return pokemonLocationsNearby;
+    }
+
+    public PokemonSpotDto putPokemon(PokemonSpotAdminCommand command) {
+        CoordinatesDto dto = nhnMapService.getCoordinatesByAddress(command.getAddress());
+        if (dto.getHeader().getResultCode() != 0) {
+            return new PokemonSpotDto();
+        }
+
+        String lat = dto.getAddress().getAdm().get(0).getPosy();
+        String lon = dto.getAddress().getAdm().get(0).getPosx();
+
+        PokemonJpo pokemonJpo = pokemonRepository.findByPokemonName(command.name);
+        Optional<PokemonJpo> randomPokemon = pokemonRepository.findById(pokemonJpo.getId());
+
+        if (randomPokemon.isPresent()) {
+            PokemonJpo selectedPokemon = randomPokemon.get();
+            pokemonLocJdbcRepository.insertPokemonLocation(lat, lon, selectedPokemon.getPokemonName());
+            return new PokemonSpotDto(lat, lon, command.getAddress(), selectedPokemon.getPokemonName());
+        } else {
+            return new PokemonSpotDto(lat, lon, command.getAddress(), "Unknown Pokemon");
+        }
     }
 }

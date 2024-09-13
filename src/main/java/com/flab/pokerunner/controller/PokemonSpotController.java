@@ -1,5 +1,6 @@
 package com.flab.pokerunner.controller;
 
+import com.flab.pokerunner.domain.command.spot.PokemonSpotAdminCommand;
 import com.flab.pokerunner.domain.command.spot.PokemonSpotCommand;
 import com.flab.pokerunner.domain.dto.response.PokemonSpotDto;
 import com.flab.pokerunner.service.PokemonSpotStore;
@@ -21,6 +22,12 @@ public class PokemonSpotController {
 
     @PostMapping("/place")
     public ResponseEntity<PokemonSpotDto> test(@RequestBody PokemonSpotCommand command) {
+        PokemonSpotDto pokemonSpotDto = pokemonSpotStore.putPokemon(command);
+        return ResponseEntity.ok(pokemonSpotDto);
+    }
+
+    @PostMapping("/place-admin")
+    public ResponseEntity<PokemonSpotDto> testAdmin(@RequestBody PokemonSpotAdminCommand command) {
         PokemonSpotDto pokemonSpotDto = pokemonSpotStore.putPokemon(command);
         return ResponseEntity.ok(pokemonSpotDto);
     }
