@@ -9,6 +9,9 @@ CREATE TABLE users
 ALTER TABLE users
     ADD COLUMN default_pokemon_id int NULL;
 
+ALTER TABLE users
+    ADD COLUMN comment varchar(200) NULL;
+
 CREATE TABLE user_pokemon
 (
     id               int AUTO_INCREMENT PRIMARY KEY,
@@ -31,6 +34,10 @@ CREATE TABLE pokemon
     created_dt       datetime
 );
 
+ALTER TABLE pokemon
+    ADD COLUMN pre_evolution_name  VARCHAR(255),
+    ADD COLUMN next_evolution_name VARCHAR(255);
+
 CREATE TABLE user_running
 (
     id             int AUTO_INCREMENT PRIMARY KEY,
@@ -48,6 +55,9 @@ CREATE TABLE seoul_gu_boss
     user_id     int
 );
 
+ALTER TABLE seoul_gu_boss
+    ADD COLUMN boss_comment varchar(200);
+
 CREATE TABLE seoul_gu
 (
     id         int AUTO_INCREMENT PRIMARY KEY,
@@ -60,3 +70,15 @@ ALTER TABLE user_running
 
 ALTER TABLE user_running
     MODIFY COLUMN pace varchar(200) NULL;
+
+CREATE TABLE pokemon_location_real_time
+(
+    id           int AUTO_INCREMENT PRIMARY KEY,
+    pokemon_name varchar(200) NOT NULL,
+    coordinates  POINT        NOT NULL,
+    SPATIAL INDEX (coordinates)
+);
+
+ALTER TABLE pokemon_location_real_time
+    ADD COLUMN owner_id int NULL;
+
