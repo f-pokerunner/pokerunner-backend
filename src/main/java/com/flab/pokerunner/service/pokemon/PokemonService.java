@@ -22,11 +22,15 @@ public class PokemonService {
         PokemonJpo picachu = pokemonRepository.findByPokemonNameAndEvolutionStatus("피츄", "1");
         PokemonJpo bulbasaur = pokemonRepository.findByPokemonNameAndEvolutionStatus("이상해씨", "1");
         PokemonJpo ggobugi = pokemonRepository.findByPokemonNameAndEvolutionStatus("꼬부기", "1");
+        PokemonJpo pingbok = pokemonRepository.findByPokemonName("핑복");
+        PokemonJpo minyog = pokemonRepository.findByPokemonName("미뇽");
 
         return Arrays.asList(
                 toDefaultPokemonDto(picachu),
                 toDefaultPokemonDto(bulbasaur),
-                toDefaultPokemonDto(ggobugi)
+                toDefaultPokemonDto(ggobugi),
+                toDefaultPokemonDto(pingbok),
+                toDefaultPokemonDto(minyog)
         );
     }
 
