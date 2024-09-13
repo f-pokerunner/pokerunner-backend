@@ -57,7 +57,8 @@ public class RunningOrchestrator {
         List<PokemonLocationDto> foundPokemons = pokemonSpotStore.searchPokemon(event);
         foundPokemons.forEach(pokemon -> {
             log.info("{} 이 찾은 포켓몬 이름:{}", event.getUserId(), pokemon.getPokemonName());
-            pokemonStore.save(event, pokemon);
+            boolean isDuplicated = pokemonStore.duplicateSamePokemon(event.getUserId(), pokemon.getPokemonName());
+            if (!isDuplicated) pokemonStore.save(event, pokemon);
         });
     }
 }

@@ -1,17 +1,16 @@
 package com.flab.pokerunner.repository.pokemon;
 
 import com.flab.pokerunner.domain.entity.UserPokemonJpo;
-import com.flab.pokerunner.domain.entity.UserRunningJpo;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserPokemonRepository extends JpaRepository<UserPokemonJpo, Integer> {
 
     UserPokemonJpo findByUserId(int userId);
 
     List<UserPokemonJpo> findAllByUserUuid(String userUuid);
-
 
     UserPokemonJpo findByUserIdAndPokemonId(int userId, int pokemonId);
 
@@ -23,6 +22,5 @@ public interface UserPokemonRepository extends JpaRepository<UserPokemonJpo, Int
 
     Optional<UserPokemonJpo> findFirstByUserUuidAndDefaultPokemon(String userUuid, boolean defaultPokemon);
 
-
-
+    List<UserPokemonJpo> findAllByUserId(int userId);
 }

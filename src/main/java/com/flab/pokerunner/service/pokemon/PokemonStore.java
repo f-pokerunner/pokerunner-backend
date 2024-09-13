@@ -10,9 +10,13 @@ import com.flab.pokerunner.repository.UserRepository;
 import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PokemonStore {
@@ -45,5 +49,19 @@ public class PokemonStore {
     public void save(PokemonSearched event, PokemonLocationDto pokemonName) {
         UserPokemonJpo capturedPokemon = UserPokemonJpo.from(event, pokemonName);
         userPokemonRepository.save(capturedPokemon);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean duplicateSamePokemon(int userId, String foundPokemonName) {
+        List<UserPokemonJpo> foundPokemons = userPokemonRepository.findAllByUserId(userId);
+        List<String> nicknames = foundPokemons.stream().map(UserPokemonJpo::getNickname).toList();
+
+        for (String nickname : nicknames) {
+            if (nickname.equals(foundPokemonName)) {
+                log.info("{} 은 {} 을 이미 가지고 있습니다.", userId, foundPokemonName);
+                return true;
+            }
+        }
+        return false;
     }
 }
