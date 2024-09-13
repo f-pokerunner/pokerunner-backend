@@ -44,9 +44,9 @@ public class PokemonSpotStore {
         if (randomPokemon.isPresent()) {
             PokemonJpo selectedPokemon = randomPokemon.get();
             pokemonLocJdbcRepository.insertPokemonLocation(lat, lon, selectedPokemon.getPokemonName());
-            return new PokemonSpotDto(lat, lon, command.getAddress(), selectedPokemon.getPokemonName());
+            return new PokemonSpotDto(lat, lon, command.getAddress(), selectedPokemon.getPokemonName(), selectedPokemon.getImageUrl());
         } else {
-            return new PokemonSpotDto(lat, lon, command.getAddress(), "Unknown Pokemon");
+            return new PokemonSpotDto(lat, lon, command.getAddress(), "Unknown Pokemon", "");
         }
     }
 
@@ -73,9 +73,9 @@ public class PokemonSpotStore {
         if (randomPokemon.isPresent()) {
             PokemonJpo selectedPokemon = randomPokemon.get();
             pokemonLocJdbcRepository.insertPokemonLocation(lat, lon, selectedPokemon.getPokemonName());
-            return new PokemonSpotDto(lat, lon, command.getAddress(), selectedPokemon.getPokemonName());
+            return new PokemonSpotDto(lat, lon, command.getAddress(), selectedPokemon.getPokemonName(), selectedPokemon.getImageUrl());
         } else {
-            return new PokemonSpotDto(lat, lon, command.getAddress(), "Unknown Pokemon");
+            return new PokemonSpotDto(lat, lon, command.getAddress(), "Unknown Pokemon", "");
         }
     }
 }

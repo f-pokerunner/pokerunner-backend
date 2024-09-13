@@ -12,4 +12,5 @@ public class PokemonSpotDto {
     String lng;
     String address;
     String pokemonName;
+    String imageUrl;
 }
