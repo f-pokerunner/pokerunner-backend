@@ -19,7 +19,7 @@ public class PokemonService {
     private final PokemonRepository pokemonRepository;
 
     public List<DefaultPokemonDto> getDefaultPokemons() {
-        PokemonJpo picachu = pokemonRepository.findByPokemonNameAndEvolutionStatus("피카츄", "1");
+        PokemonJpo picachu = pokemonRepository.findByPokemonNameAndEvolutionStatus("피츄", "1");
         PokemonJpo bulbasaur = pokemonRepository.findByPokemonNameAndEvolutionStatus("이상해씨", "1");
         PokemonJpo ggobugi = pokemonRepository.findByPokemonNameAndEvolutionStatus("꼬부기", "1");
 
