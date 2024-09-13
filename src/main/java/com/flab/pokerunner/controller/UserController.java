@@ -6,6 +6,7 @@ import com.flab.pokerunner.service.user.UserCommentService;
 import com.flab.pokerunner.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,8 +48,12 @@ public class UserController {
 
     @PutMapping("/pokemon/default")
     public ResponseEntity<String> setDefaultPokemon(@RequestBody UserSetDefaultPokemonDto userSetDefaultPokemonDto) {
-        userService.setDefaultPokemon(userSetDefaultPokemonDto);
-        return ResponseEntity.ok("Pokemon saved as default.");
+        boolean success = userService.setDefaultPokemon(userSetDefaultPokemonDto);
+        if (success) {
+            return ResponseEntity.ok("Pokémon saved as default.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Requested Pokémon not found.");
+        }
     }
 
     @PostMapping("/pokemon")

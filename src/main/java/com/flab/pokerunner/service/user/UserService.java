@@ -102,7 +102,7 @@ public class UserService {
                 .build();
     }
 
-    public void setDefaultPokemon(UserSetDefaultPokemonDto userSetDefaultPokemonDto) {
+    public boolean setDefaultPokemon(UserSetDefaultPokemonDto userSetDefaultPokemonDto) {
         UserPokemonJpo currentDefaultPokemon = userPokemonRepository.findByUserUuidAndDefaultPokemon(userSetDefaultPokemonDto.getUuid(), true);
         if (currentDefaultPokemon != null) {
             currentDefaultPokemon.setDefaultPokemon(false);
@@ -111,7 +111,8 @@ public class UserService {
 
         UserPokemonJpo newDefaultPokemon = userPokemonRepository.findFirstByUserUuidAndNickname(userSetDefaultPokemonDto.getUuid(), userSetDefaultPokemonDto.getPokemonName());
         if (newDefaultPokemon == null) {
-            throw new PokemonNotFoundException("Requested Pokémon not found");
+            log.info("Requested Pokémon not found");
+            return false;
         }
         newDefaultPokemon.setDefaultPokemon(true);
         userPokemonRepository.save(newDefaultPokemon);
@@ -120,6 +121,7 @@ public class UserService {
         UserJpo userJpo = userRepository.findByUuid(userSetDefaultPokemonDto.getUuid());
         userJpo.setDefaultPokemonId(newDefaultPokemon.getPokemonId());
         userRepository.save(userJpo);
+        return true;
     }
 
     public void addUserPokemon(AddPokemonDto addPokemonDto) {
@@ -181,6 +183,5 @@ public class UserService {
             .notRunningDays(notRunningDays)
             .build();
     }
-
 
 }
