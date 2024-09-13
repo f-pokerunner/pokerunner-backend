@@ -36,7 +36,7 @@ public class UserPokemonJpo {
     @Column(name = "evolution_status")
     public String evolutionStatus;
 
-    public static UserPokemonJpo from(PokemonSearched event, PokemonLocationDto pokemonLocationDto) {
+    public static UserPokemonJpo from(PokemonSearched event, PokemonLocationDto pokemonLocationDto, String uuid) {
         return UserPokemonJpo.builder()
                 .userId(event.getUserId())
                 .pokemonId(pokemonLocationDto.getPokemonId())
@@ -46,6 +46,7 @@ public class UserPokemonJpo {
                 .level(1)
                 .experience(0)
                 .createdAt(LocalDateTime.now())
+                .userUuid(uuid)
                 .build();
     }
 
