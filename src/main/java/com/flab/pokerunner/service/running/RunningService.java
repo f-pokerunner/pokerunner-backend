@@ -6,6 +6,7 @@ import com.flab.pokerunner.domain.command.running.StopRunningCommand;
 import com.flab.pokerunner.domain.dto.pokemon.UserPokemonDao;
 import com.flab.pokerunner.domain.dto.response.StopRunningResponse;
 import com.flab.pokerunner.domain.dto.running.UserRunningSummaryDto;
+import com.flab.pokerunner.handler.LocationWebSocketHandler;
 import com.flab.pokerunner.repository.pokemon.UserPokemonJdbcRepository;
 import com.flab.pokerunner.service.NHNMapService;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +24,12 @@ public class RunningService {
     private final GateWay gateWay;
     private final NHNMapService NHNMapService;
     private final UserPokemonJdbcRepository userPokemonJdbcRepository;
+    private final LocationWebSocketHandler locationWebSocketHandler;
 
     public void start(StartRunningCommand command) {
         int userId = command.getUserId();
 
-        RunningSimulator simulator = new RunningSimulator(command, gateWay, NHNMapService);
+        RunningSimulator simulator = new RunningSimulator(command, gateWay, NHNMapService, locationWebSocketHandler);
         simulators.put(userId, simulator);
         simulator.start();
     }

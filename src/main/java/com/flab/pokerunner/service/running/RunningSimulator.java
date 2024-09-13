@@ -7,9 +7,11 @@ import com.flab.pokerunner.domain.dto.running.UserRunningSummaryDto;
 import com.flab.pokerunner.domain.event.running.PokemonSearched;
 import com.flab.pokerunner.domain.event.running.RunningStarted;
 import com.flab.pokerunner.domain.event.running.RunningStopped;
+import com.flab.pokerunner.handler.LocationWebSocketHandler;
 import com.flab.pokerunner.service.NHNMapService;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Random;
@@ -26,6 +28,7 @@ public class RunningSimulator {
     private final NHNMapService NHNMapService;
     private final GateWay gateWay;
     private final int userId;
+    private final LocationWebSocketHandler locationWebSocketHandler;
     HashMap<Integer, String> userLocation = new HashMap<>();
     private double currentLat;
     private double currentLng;
@@ -33,7 +36,10 @@ public class RunningSimulator {
     private long startTime;
     private double totalDistance;
 
-    public RunningSimulator(StartRunningCommand command, GateWay gateWay, NHNMapService NHNMapService) {
+    public RunningSimulator(StartRunningCommand command,
+                            GateWay gateWay,
+                            NHNMapService NHNMapService,
+                            LocationWebSocketHandler locationWebSocketHandler) {
         this.currentLat = Double.parseDouble(command.lat);
         this.currentLng = Double.parseDouble(command.lon);
         this.direction = new Random().nextDouble() * 2 * Math.PI;
@@ -42,6 +48,7 @@ public class RunningSimulator {
         this.NHNMapService = NHNMapService;
         this.gateWay = gateWay;
         this.userId = command.getUserId();
+        this.locationWebSocketHandler = locationWebSocketHandler;
     }
 
     public void start() {
@@ -102,6 +109,13 @@ public class RunningSimulator {
         }
 
         log.info("현재 위치: {}, {}, {}", currentLat, currentLng, address);
+        String message = String.format("{\"lat\": %f, \"lng\": %f}", currentLat, currentLng);
+
+        try {
+            locationWebSocketHandler.sendMessage(message);
+        } catch (IOException e) {
+            log.error("Failed to send WebSocket message", e);
+        }
         gateWay.publish(PokemonSearched.of(userId, currentLat, currentLng));
 
         currentLat += latChange;
