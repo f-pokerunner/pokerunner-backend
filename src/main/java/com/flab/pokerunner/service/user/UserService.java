@@ -14,7 +14,9 @@ import com.flab.pokerunner.repository.running.UserRunningRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -174,6 +176,21 @@ public class UserService {
             notRunningDays = (int) ChronoUnit.DAYS.between(latestRunEndTime.toLocalDate(), LocalDate.now());
         }
 
+        List<String> comments = new ArrayList<>();
+        comments.add("오늘도 달려달려~ 피카츄처럼 빠르게!");
+        comments.add("조금 더 달리면 진화할 수 있을 거야! 끝까지 가자!");
+        comments.add("달리면서 체력을 키워, 너의 포켓몬도 강해질 거야!");
+        comments.add("매일매일 달리기! 파이리의 불꽃처럼 포기하지 말자!");
+        comments.add("나와 함께 뛰면 넌 더 빨라질 거야!");
+        comments.add("달리는 순간마다 너의 포켓몬도 함께 성장해!");
+        comments.add("레이스가 끝날 때까지 힘내! 우리는 이길 수 있어!");
+        comments.add("비록 천천히 달려도 괜찮아, 꾸준함이 강함이야!");
+        comments.add("포켓몬이 널 응원해! 달리자, 오늘도 최고의 트레이너가 되어보자!");
+
+        Random random = new Random();
+        String randomComment = comments.get(random.nextInt(comments.size()));
+
+
         return UserHomeDto.builder()
             .level(userPokemonJpo.getLevel())
             .experience(userPokemonJpo.getExperience())
@@ -181,6 +198,7 @@ public class UserService {
             .pokemonName(userPokemonJpo.getNickname())
             .userNickname(userJpo.getNickname())
             .notRunningDays(notRunningDays)
+            .pokemonComment(randomComment)
             .build();
     }
 

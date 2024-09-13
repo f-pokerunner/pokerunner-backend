@@ -14,4 +14,5 @@ public class UserHomeDto {
     private String imageUrl;
     private String userNickname;
     private int notRunningDays;
+    private String pokemonComment;
 }
