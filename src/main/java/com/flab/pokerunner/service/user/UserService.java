@@ -12,6 +12,8 @@ import com.flab.pokerunner.repository.pokemon.PokemonRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
 import com.flab.pokerunner.repository.running.UserRunningRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -155,6 +157,29 @@ public class UserService {
                 .endTime(userRunningJpo.getEndTime())
                 .guAddress(userRunningJpo.getGuAddress())
                 .build();
+    }
+
+    public UserHomeDto getUserHomeInfo(String userUuid) {
+        UserJpo userJpo = userRepository.findByUuid(userUuid);
+        UserPokemonJpo userPokemonJpo = userPokemonRepository.findFirstByUserUuidAndDefaultPokemon(userJpo.getUuid(), true)
+                .orElseThrow(() -> new PokemonNotFoundException("Default Pokemon not found for user: " + userJpo.getUuid()));
+
+        PokemonJpo pokemonJpo = pokemonRepository.findByPokemonNameAndEvolutionStatus(userPokemonJpo.getNickname(), userPokemonJpo.getEvolutionStatus());
+        LocalDateTime latestRunEndTime = userRunningRepository.findLatestEndTimeByUserId(userJpo.getId());
+
+        int notRunningDays = 0;
+        if (latestRunEndTime != null) {
+            notRunningDays = (int) ChronoUnit.DAYS.between(latestRunEndTime.toLocalDate(), LocalDate.now());
+        }
+
+        return UserHomeDto.builder()
+            .level(userPokemonJpo.getLevel())
+            .experience(userPokemonJpo.getExperience())
+            .imageUrl(pokemonJpo.getImageUrl())
+            .pokemonName(userPokemonJpo.getNickname())
+            .userNickname(userJpo.getNickname())
+            .notRunningDays(notRunningDays)
+            .build();
     }
 
 

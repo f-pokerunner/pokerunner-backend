@@ -74,4 +74,10 @@ public class UserController {
         UserCommentDto responseDto = userCommentService.addUserComment(userCommentDto);
         return ResponseEntity.ok(responseDto);
     }
+
+    @GetMapping("/home/{user_uuid}")
+    public ResponseEntity<UserHomeDto> getHomeInfo(@PathVariable String user_uuid) {
+        UserHomeDto userHomeDto = userService.getUserHomeInfo(user_uuid);
+        return ResponseEntity.ok(userHomeDto);
+    }
 }
