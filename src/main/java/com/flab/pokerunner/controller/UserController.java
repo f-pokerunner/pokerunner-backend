@@ -2,6 +2,7 @@ package com.flab.pokerunner.controller;
 
 import com.flab.pokerunner.domain.dto.*;
 import com.flab.pokerunner.domain.dto.running.UserRunningInfoDto;
+import com.flab.pokerunner.service.user.UserCommentService;
 import com.flab.pokerunner.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserCommentService userCommentService;
 
     @PostMapping("/exists")
     public ResponseEntity<Boolean> checkExistingUser(@RequestBody UuidRequestDTO uuidRequestDTO) {
@@ -61,5 +63,15 @@ public class UserController {
         return ResponseEntity.ok(userRunningInfoDtos);
     }
 
+    @GetMapping("/comments")
+    public ResponseEntity<UserCommentDto> getUserComment(@RequestParam int userId) {
+        UserCommentDto userCommentInfo = userCommentService.getUserCommentInfo(userId);
+        return ResponseEntity.ok(userCommentInfo);
+    }
 
+    @PostMapping("/comments")
+    public ResponseEntity<UserCommentDto> addUserComment(@RequestBody UserCommentDto userCommentDto) {
+        UserCommentDto responseDto = userCommentService.addUserComment(userCommentDto);
+        return ResponseEntity.ok(responseDto);
+    }
 }
