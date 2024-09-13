@@ -47,7 +47,9 @@ public class PokemonStore {
 
     @Transactional
     public void save(PokemonSearched event, PokemonLocationDto pokemonName) {
-        UserPokemonJpo capturedPokemon = UserPokemonJpo.from(event, pokemonName);
+        UserJpo foundUser = userRepository.findById(event.getUserId());
+        String uuid = foundUser.getUuid();
+        UserPokemonJpo capturedPokemon = UserPokemonJpo.from(event, pokemonName, uuid);
         userPokemonRepository.save(capturedPokemon);
     }
 

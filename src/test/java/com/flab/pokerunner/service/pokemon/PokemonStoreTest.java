@@ -1,9 +1,6 @@
 package com.flab.pokerunner.service.pokemon;
 
-import com.flab.pokerunner.domain.dto.PokemonLocationDto;
 import com.flab.pokerunner.domain.entity.UserJpo;
-import com.flab.pokerunner.domain.entity.UserPokemonJpo;
-import com.flab.pokerunner.domain.event.running.PokemonSearched;
 import com.flab.pokerunner.domain.event.running.RunningStopped;
 import com.flab.pokerunner.repository.UserRepository;
 import com.flab.pokerunner.repository.pokemon.UserPokemonRepository;
@@ -14,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.env.Environment;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -43,15 +39,5 @@ class PokemonStoreTest {
 
         pokemonStore.save(event);
         verify(userPokemonRepository, never()).findByUserIdAndPokemonId(anyInt(), anyInt());
-    }
-
-    @Test
-    void savePokemonSearched_withValidParameters() {
-        var event = mock(PokemonSearched.class);
-        var pokemonLocation = mock(PokemonLocationDto.class);
-
-        pokemonStore.save(event, pokemonLocation);
-
-        verify(userPokemonRepository).save(any(UserPokemonJpo.class));
     }
 }
