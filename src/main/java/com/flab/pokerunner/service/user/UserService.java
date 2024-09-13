@@ -113,6 +113,9 @@ public class UserService {
         }
         newDefaultPokemon.setDefaultPokemon(true);
         userPokemonRepository.save(newDefaultPokemon);
+
+        //update Pokemon Repo
+
     }
 
     public void addUserPokemon(AddPokemonDto addPokemonDto) {
