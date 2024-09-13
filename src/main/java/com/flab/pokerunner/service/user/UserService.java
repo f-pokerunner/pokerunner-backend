@@ -115,7 +115,9 @@ public class UserService {
         userPokemonRepository.save(newDefaultPokemon);
 
         //update Pokemon Repo
-
+        UserJpo userJpo = userRepository.findByUuid(userSetDefaultPokemonDto.getUuid());
+        userJpo.setDefaultPokemonId(newDefaultPokemon.getPokemonId());
+        userRepository.save(userJpo);
     }
 
     public void addUserPokemon(AddPokemonDto addPokemonDto) {
