@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -39,7 +40,9 @@ public class RunningService {
             userRunningSummaryDto = simulator.stop();
         }
 
-        UserPokemonDao userPokemonDao = userPokemonJdbcRepository.findUserPokemonByUserId(command.userId);
+        Optional<UserPokemonDao> userPokemonOpt = userPokemonJdbcRepository.findUserPokemonByUserId(command.getUserId());
+        UserPokemonDao userPokemonDao = userPokemonOpt.orElseThrow(() -> new RuntimeException("User Pokemon not found"));
+
         return StopRunningResponse.from(userPokemonDao, Objects.requireNonNull(userRunningSummaryDto));
     }
 }
