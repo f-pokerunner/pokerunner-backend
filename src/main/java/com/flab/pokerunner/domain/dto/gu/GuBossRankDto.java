@@ -8,6 +8,7 @@ import lombok.Data;
 public class GuBossRankDto {
     public int ranking;
     public int userId;
+    public String comment;
     public String runningAddress;
     public String userNickname;
     public String totalDistanceMeter;

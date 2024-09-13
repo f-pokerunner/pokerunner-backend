@@ -31,4 +31,6 @@ public class UserJpo {
     private LocalDateTime createdAt;
 
     private Integer defaultPokemonId;
+
+    private String comment;
 }

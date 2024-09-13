@@ -48,6 +48,7 @@ public class GuJdbcRepository {
     public List<GuBossRankDto> getGuBossByGuLimit3(String guAddress) {
         String sql = """
                 WITH ranked_users AS (SELECT u.id                                                                      AS userId,
+                                             u.comment                                                                 AS comment,
                                              u.nickname                                                                AS userNickname,
                                              ur.gu_address                                                             AS runningAddress,
                                              SUM(CAST(ur.distance_meter AS DECIMAL))                                   AS totalDistanceMeter,
@@ -64,6 +65,7 @@ public class GuJdbcRepository {
                                       GROUP BY u.id, u.nickname, ur.gu_address, up.nickname, up.experience, up.level, p.image_url)
                 SELECT ranking,
                        userId,
+                       comment,
                        userNickname,
                        runningAddress,
                        totalDistanceMeter,
@@ -79,6 +81,7 @@ public class GuJdbcRepository {
         return jdbcTemplate.query(sql, (rs, rowNum) -> GuBossRankDto.builder()
                 .ranking(rs.getInt("ranking"))
                 .userId(rs.getInt("userId"))
+                .comment(rs.getString("comment"))
                 .userNickname(rs.getString("userNickname"))
                 .runningAddress(rs.getString("runningAddress"))
                 .totalDistanceMeter(rs.getString("totalDistanceMeter"))

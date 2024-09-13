@@ -41,7 +41,6 @@ public class GuController {
 
     @PostMapping("/boss")
     public ResponseEntity<List<GuBossRankDto>> guBossTopThree(@RequestBody GuRequestDto guRequestDto) {
-        log.info("dto:{}", guRequestDto.guAddress);
         List<GuBossRankDto> guBossByGuLimit3 = guJdbcRepository.getGuBossByGuLimit3(guRequestDto.guAddress);
         return ResponseEntity.ok(guBossByGuLimit3);
     }
