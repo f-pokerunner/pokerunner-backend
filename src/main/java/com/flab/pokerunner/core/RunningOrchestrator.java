@@ -22,7 +22,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RunningOrchestrator {
 
-    private final GateWay gateWay;
     private final RunningStore runningStore;
     private final PokemonStore pokemonStore;
     private final PokemonSpotStore pokemonSpotStore;
