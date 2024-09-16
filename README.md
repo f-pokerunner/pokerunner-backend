@@ -56,6 +56,9 @@
 ## 프로젝트 실행
 
 - 이 프로젝트의 실행에는 MySQL 8.0 이상의 버전이 필요합니다.
+    - CTE 구문이 있고 반경 계산 관련된 구문이 존재해서 그렇습니다
 - pokerunner-ddl.sql 파일을 실행이 필요합니다.
 - nhn 클라우드의 맵 API 의 개인 인증키가 필요합니다.
     - key.properties 파일을 만들고 `nhn.key={key}` 를 입력하시면 됩니다.
+    - NHN 맵 발급받는 방법은 아래의 링크를 참조해주세요.
+    - https://www.nhncloud.com/kr/service/application-service/maps?lang=ko
