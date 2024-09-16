@@ -62,3 +62,4 @@
     - key.properties 파일을 만들고 `nhn.key={key}` 를 입력하시면 됩니다.
     - NHN 맵 발급받는 방법은 아래의 링크를 참조해주세요.
     - https://www.nhncloud.com/kr/service/application-service/maps?lang=ko
+- logback 파일을 별도로 두었습니다. 디폴트 경로는 `${HOME}/pokerunner/log/` 입니다.
