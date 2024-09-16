@@ -1,84 +1,75 @@
+CREATE SCHEMA pokerunner;
+USE pokerunner;
+
+
 CREATE TABLE users
 (
-    id         int AUTO_INCREMENT PRIMARY KEY,
-    nickname   varchar(255),
-    address    varchar(255),
-    created_at datetime
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    nickname           VARCHAR(255),
+    address            VARCHAR(255),
+    created_at         DATETIME,
+    uuid               VARCHAR(200),
+    default_pokemon_id INT,
+    comment            VARCHAR(200)
 );
-
-ALTER TABLE users
-    ADD COLUMN default_pokemon_id int NULL;
-
-ALTER TABLE users
-    ADD COLUMN comment varchar(200) NULL;
 
 CREATE TABLE user_pokemon
 (
-    id               int AUTO_INCREMENT PRIMARY KEY,
-    user_id          int,
-    pokemon_id       int,
-    nickname         varchar(255),
-    health           int,
-    evolution_status varchar(255),
-    level            int,
-    experience       int,
-    created_dt       datetime
+    id               INT AUTO_INCREMENT PRIMARY KEY,
+    user_id          INT,
+    pokemon_id       INT,
+    nickname         VARCHAR(255),
+    health           INT,
+    evolution_status VARCHAR(255),
+    level            INT,
+    experience       INT,
+    created_at       DATETIME,
+    user_uuid        VARCHAR(200),
+    default_pokemon  BOOLEAN
 );
 
 CREATE TABLE pokemon
 (
-    id               int AUTO_INCREMENT PRIMARY KEY,
-    pokemon_name     varchar(255),
-    evolution_status varchar(255),
-    image_url        varchar(255),
-    created_dt       datetime
+    id                  INT AUTO_INCREMENT PRIMARY KEY,
+    pokemon_name        VARCHAR(255),
+    evolution_status    VARCHAR(255),
+    image_url           VARCHAR(255),
+    created_dt          DATETIME,
+    pre_evolution_name  VARCHAR(255),
+    next_evolution_name VARCHAR(255)
 );
-
-ALTER TABLE pokemon
-    ADD COLUMN pre_evolution_name  VARCHAR(255),
-    ADD COLUMN next_evolution_name VARCHAR(255);
 
 CREATE TABLE user_running
 (
-    id             int AUTO_INCREMENT PRIMARY KEY,
-    user_id        int,
-    distance_meter int,
-    start_time     datetime,
-    end_time       datetime,
-    pace           double
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    user_id        INT,
+    distance_meter VARCHAR(200),
+    start_time     DATETIME,
+    end_time       DATETIME,
+    pace           VARCHAR(200),
+    gu_address     VARCHAR(200)
 );
 
 CREATE TABLE seoul_gu_boss
 (
-    id          int AUTO_INCREMENT PRIMARY KEY,
-    seoul_gu_id int,
-    user_id     int
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    seoul_gu_id  INT,
+    user_id      INT,
+    boss_comment VARCHAR(200)
 );
-
-ALTER TABLE seoul_gu_boss
-    ADD COLUMN boss_comment varchar(200);
 
 CREATE TABLE seoul_gu
 (
-    id         int AUTO_INCREMENT PRIMARY KEY,
-    gu_name    varchar(255),
-    created_dt datetime
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    gu_name    VARCHAR(255),
+    created_dt DATETIME
 );
-
-ALTER TABLE user_running
-    MODIFY COLUMN distance_meter varchar(200) NULL;
-
-ALTER TABLE user_running
-    MODIFY COLUMN pace varchar(200) NULL;
 
 CREATE TABLE pokemon_location_real_time
 (
-    id           int AUTO_INCREMENT PRIMARY KEY,
-    pokemon_name varchar(200) NOT NULL,
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    pokemon_name VARCHAR(200) NOT NULL,
     coordinates  POINT        NOT NULL,
+    owner_id     INT,
     SPATIAL INDEX (coordinates)
 );
-
-ALTER TABLE pokemon_location_real_time
-    ADD COLUMN owner_id int NULL;
-

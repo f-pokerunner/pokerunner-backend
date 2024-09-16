@@ -52,3 +52,8 @@
     - `PokemonSearched`
 
 ![img.png](img.png)
+
+## 프로젝트 실행
+
+- 이 프로젝트의 실행에는 MySQL 8.0 이상의 버전이 필요합니다.
+- pokerunner-ddl.sql 파일을 실행이 필요합니다.

@@ -11,18 +11,11 @@ spring:
       ddl-auto: validate
 
   datasource:
-    url: ${database.url}
-    username: ${database.username}
-    password: ${database.password}
+    url: jdbc:mysql://localhost:3306/pokerunner
+    username: root
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
-
 
 nhn:
   map:
     url: ${nhn.url}
-
-
-evolution:
-  level:
-    first: 3
-    second: 5
