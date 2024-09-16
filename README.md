@@ -57,3 +57,5 @@
 
 - 이 프로젝트의 실행에는 MySQL 8.0 이상의 버전이 필요합니다.
 - pokerunner-ddl.sql 파일을 실행이 필요합니다.
+- nhn 클라우드의 맵 API 의 개인 인증키가 필요합니다.
+    - key.properties 파일을 만들고 `nhn.key={key}` 를 입력하시면 됩니다.

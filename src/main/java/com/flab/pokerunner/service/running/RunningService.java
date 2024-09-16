@@ -1,6 +1,7 @@
 package com.flab.pokerunner.service.running;
 
 import com.flab.pokerunner.core.GateWay;
+import com.flab.pokerunner.core.exception.UserPokemonNotFoundException;
 import com.flab.pokerunner.domain.command.running.StartRunningCommand;
 import com.flab.pokerunner.domain.command.running.StopRunningCommand;
 import com.flab.pokerunner.domain.dto.pokemon.UserPokemonDao;
@@ -43,7 +44,7 @@ public class RunningService {
         }
 
         Optional<UserPokemonDao> userPokemonOpt = userPokemonJdbcRepository.findUserPokemonByUserId(command.getUserId());
-        UserPokemonDao userPokemonDao = userPokemonOpt.orElseThrow(() -> new RuntimeException("User Pokemon not found"));
+        UserPokemonDao userPokemonDao = userPokemonOpt.orElseThrow(() -> new UserPokemonNotFoundException(""));
 
         return StopRunningResponse.from(userPokemonDao, Objects.requireNonNull(userRunningSummaryDto));
     }

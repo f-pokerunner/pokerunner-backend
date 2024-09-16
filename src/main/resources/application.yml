@@ -3,7 +3,7 @@ logging:
 
 spring:
   config:
-    import: "db.properties"
+    import: "key.properties"
   application:
     name: pokerunner
   jpa:
@@ -18,4 +18,4 @@ spring:
 
 nhn:
   map:
-    url: ${nhn.url}
+    url: https://kr1-maps.api.nhncloudservice.com/maps/v3.0/appkeys/${nhn.key}

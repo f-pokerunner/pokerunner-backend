@@ -28,6 +28,10 @@ public class PokemonStore {
     @Transactional
     public void save(RunningStopped event) {
         UserJpo user = userRepository.findById(event.getUserId());
+        if (user == null) {
+            log.info("등록되지 않은 사용자");
+            return;
+        }
         Integer defaultPokemonId = user.getDefaultPokemonId();
         if (defaultPokemonId == null) return;
 
